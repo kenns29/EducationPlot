@@ -1,0 +1,14 @@
+{
+  "name": "hong",
+  "version": "0.0.1",
+  "description": "my first nodejs app",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "d3": "^3.5.17",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "jquery": "^2.2.3",
+    "multer": "^1.1.0",
+    "path": "^0.12.7"
+  }
+}

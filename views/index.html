@@ -1,0 +1,61 @@
+<html>
+<header>
+<link rel="stylesheet"
+	href="lib/jquery-ui-themes-1.11.4/themes/redmond/jquery-ui.min.css" />
+<link rel="stylesheet"
+	href="lib/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="lib/leaflet-0.7.3/leaflet.css" />
+<link rel="stylesheet" href="lib/awesome-bootstrap-checkbox.css" />
+<link rel="stylesheet" href="lib/bootstrap-table/bootstrap-table.css" />
+
+<script type="text/javascript" src="lib/async/async.js"></script>
+<script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" src="lib/d3/d3.js"></script>
+<script type="text/javascript" src="lib/d3.layout.cloud.js"></script>
+<script type="text/javascript" src="lib/leaflet-0.7.3/leaflet.js"></script>
+<script type="text/javascript" src="lib/d3/d3-tip.js"></script>
+<script type="text/javascript"
+	src="lib/Leaflet.D3SvgOverlay/L.D3SvgOverlay.js"></script>
+<script type="text/javascript"
+	src="lib/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="lib/bootstrap-table/bootstrap-table.js"></script>
+<script type="text/javascript" src="lib/math.min.js"></script>
+</header>
+<body>
+
+<div class = "row">
+	<div id = "tree-container" style="height:500px;">
+		<p> This is index </p>
+	</div>
+</div>
+
+<script>
+
+	var url = 'http://localhost:3000/loaddata'
+	var config = {
+	};
+	
+	$.ajax({
+		type: 'GET',
+		url: url,
+		data: config,
+		dataType: 'json',
+		beforeSend: function(jqXHR, settings){
+		},
+		success : function(data, textStatus, jqXHR){
+			console.log('data', data);
+		},
+		error: function(jqXHR, textStatus, message){
+			console.log(message);
+			console.log(textStatus);
+		},
+		complete: function(jqXHR, textStatus){
+			console.log(textStatus);
+		}
+	});
+</script>
+<script type="text/javascript" src = "init.js"></script>
+</body>
+</html>
