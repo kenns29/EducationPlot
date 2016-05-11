@@ -1,0 +1,44 @@
+#container{
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
+#container #container_up{
+	width: 100%;
+	height: 80%;
+	margin: auto;
+}
+
+#container #container_bottom{
+	width: 100%;
+	height: 20%;
+	margin: auto;
+}
+
+#container #container_up #control{
+	width: 20%;
+	height: 100%;
+	margin: auto;
+	float: left;
+}
+
+#container #container_up #canvas{
+	width: 60%;
+	height: 100%;
+	margin: auto;
+	float: left;
+}
+
+#container #container_up #leggend{
+	width: 20%;
+	height: 100%;
+	margin: auto;
+	float: left;
+}
+
+#container #container_bottom #slider{
+	width: 60%;
+	/*height: 100%;*/
+	margin: auto;
+}
