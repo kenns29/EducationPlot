@@ -1,5 +1,6 @@
 function draw(data){
 	global_data = data;
+	inst_label();
 	slider(data);
 }
 
@@ -86,18 +87,75 @@ function updatePlot(){
 	.style("text-anchor", "end")
 	.text("Pell (%)");
 
-	svg.selectAll(".dot")
+	var enter = svg.selectAll(".dot")
 	.data(data)
-	.enter().append("circle")
+	.enter().append("circle");
+
+	enter
+	.filter(function(d, i){
+		return state.InstSelection ? (d.InstSector == state.InstSelection) : true;
+	})
 	.attr("class","dot")
 	.attr("r", function(d){
-		return Math.ceil(Math.log(d["NumStudents"][state.year]/10));
+		return Math.ceil(Math.log(Math.max(1, d["NumStudents"][state.year]/10)));
 	})
 	.attr("cx", function(d){return x(d["GradRate"][state.year])})
 	.attr("cy", function(d){return y(d["Pell"][state.year])})
 	.attr("fill", function(d){
 		return color[d.InstSector - 1];
 	});
+}
 
 
+function inst_label(){
+	var width = $('#control').width();
+	var height = $('#control').height();
+
+	var boxHeight = 20;
+	var boxWidth = 30;
+	var margin = {top: 60, right: 20, bottom: 40, left: width - boxWidth - 10};
+	var W = width - margin.left - margin.right;
+	var H = height - margin.top - margin.bottom;
+	
+
+	var svg = d3.select('#control').append('svg')
+	.attr('width', width).attr('height', height);
+
+	var g = svg.append('g')
+	.attr('transform', function(){
+		return 'translate(' + [margin.left,  margin.top] + ')';
+	});
+	var boxEnter = g.selectAll('g')
+	.data(['Public', 'Private not-for-profit', 'Private for-profit', 'All'])
+	.enter().append('g')
+	.attr('transform', function(d, i){
+		return 'translate(' + [0, i*boxHeight] + ')';
+	})
+
+	boxEnter.append('rect')
+	.attr('x', 0).attr('y', 0)
+	.attr('width', boxWidth).attr('height', 20)
+	.attr('stroke', 'black').attr('stroke-width', 1)
+	.attr('fill', function(d, i){
+		if(i == 3)
+			return 'white'
+		return color[i];
+	});
+
+	boxEnter.append('text')
+	.attr('dominant-baseline', 'middle')
+	.attr('text-anchor', 'end')
+	.text(function(d){
+		return d;
+	})
+	.attr('x', -2)
+	.attr('y', boxHeight / 2);
+
+	boxEnter.on('click', function(d, i){
+		if(i > 2)
+			state.InstSelection = null;
+		else
+			state.InstSelection = i + 1;
+		updatePlot();
+	});
 }
