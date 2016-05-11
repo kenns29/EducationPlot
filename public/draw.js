@@ -44,6 +44,12 @@ function slider(data){
 function updatePlot(){
 	$("#plot").remove();
 
+	var tip = d3.tip()
+	.attr('class', 'd3-tip')
+	.offset([-10, 0])
+	.html(function(d) {
+		return "<span style='color:white'>" + d.InstName + "</span>";
+	});
 	var data = global_data;
 	var div = d3.select("#canvas").append("div").attr("id","plot");
 	var W = $("#canvas").width();
@@ -63,6 +69,7 @@ function updatePlot(){
 	.append("g")
 	.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
+	svg.call(tip);
 	//x axis
 	svg.append("g")
 	.attr("class", "x axis")
@@ -97,13 +104,16 @@ function updatePlot(){
 	})
 	.attr("class","dot")
 	.attr("r", function(d){
-		return Math.ceil(Math.log(Math.max(1, d["NumStudents"][state.year]/10)));
+		return Math.ceil(Math.log(Math.max(2, d["NumStudents"][state.year]/10)));
 	})
 	.attr("cx", function(d){return x(d["GradRate"][state.year])})
 	.attr("cy", function(d){return y(d["Pell"][state.year])})
 	.attr("fill", function(d){
 		return color[d.InstSector - 1];
 	});
+
+	enter.on('mouseover', tip.show);
+	enter.on('mouseout', tip.hide);
 }
 
 
@@ -152,10 +162,24 @@ function inst_label(){
 	.attr('y', boxHeight / 2);
 
 	boxEnter.on('click', function(d, i){
-		if(i > 2)
+		if(i > 2){
 			state.InstSelection = null;
-		else
+			d3.select(this.parentNode).selectAll('g')
+			.select('rect')
+			.attr('stroke', 'black');
+			
+		}
+		else{
 			state.InstSelection = i + 1;
+			d3.select(this).select('rect').attr('stroke', 'red');
+			d3.select(this.parentNode).selectAll('g').filter(function(g, j){
+				return g != d;
+			})
+			.select('rect')
+			.attr('stroke', 'black');
+		}
+
+		
 		updatePlot();
 	});
 }
