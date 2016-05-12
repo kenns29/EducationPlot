@@ -2,6 +2,7 @@ function draw(data){
 	global_data = data;
 	inst_label();
 	slider(data);
+	updatePlot();
 }
 
 function slider(data){
@@ -100,14 +101,16 @@ function updatePlot(){
 	var div = d3.select("#canvas").append("div").attr("id","plot");
 	var W = $("#canvas").width();
 	var H = $("#canvas").height();
-	var margin = {top: 60, right: 20, bottom: 40, left: 40};
+	var margin = {top: 60, right: 20, bottom: 40, left: 60};
 	var width = W - margin.left - margin.right;
 	var height = H - margin.top - margin.bottom;
 
-	var x = d3.scale.linear().range([0, width]).domain([0,100]);
-	var y = d3.scale.linear().range([height, 0]).domain([0,100]);
-	var xAxis = d3.svg.axis().scale(x).orient("bottom");
-	var yAxis = d3.svg.axis().scale(y).orient("left");
+	var x = d3.scale.linear().range([0, width]).domain([-10,110]);
+	var y = d3.scale.linear().range([height, 0]).domain([-10,110]);
+	var xAxis = d3.svg.axis().scale(x).orient("bottom")
+	.innerTickSize(-height);
+	var yAxis = d3.svg.axis().scale(y).orient("left")
+	.innerTickSize(-width);
 
 	var svg = div.append("svg")
 	.attr("width", W)
@@ -124,7 +127,7 @@ function updatePlot(){
 	.append("text")
 	.attr("class","label")
 	.attr("x", width)
-	.attr("y", -6)
+	.attr("y", 25)
 	.style("text-anchor","end")
 	.text("Grad Rate (%)");
 
@@ -136,7 +139,7 @@ function updatePlot(){
 	.attr("class", "label")
 	.attr("transform", "rotate(-90)")
 	.attr("y",6)
-	.attr("dy",".71em")
+	.attr("dy","-4em")
 	.style("text-anchor", "end")
 	.text("Pell (%)");
 
