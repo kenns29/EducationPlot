@@ -101,7 +101,7 @@ function updatePlot(){
 	var div = d3.select("#canvas").append("div").attr("id","plot");
 	var W = $("#canvas").width();
 	var H = $("#canvas").height();
-	var margin = {top: 60, right: 20, bottom: 40, left: 60};
+	var margin = {top: 60, right: 60, bottom: 40, left: 60};
 	var width = W - margin.left - margin.right;
 	var height = H - margin.top - margin.bottom;
 
