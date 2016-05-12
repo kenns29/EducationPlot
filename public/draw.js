@@ -154,6 +154,8 @@ function updatePlot(){
 	})
 	.attr("cx", function(d){return x(d["GradRate"][state.year])})
 	.attr("cy", function(d){return y(d["Pell"][state.year])})
+	.attr('stroke', 'gray')
+	.attr('stroke-width', 0.5)
 	.attr("fill", function(d){
 		return color[d.InstSector - 1];
 	});
