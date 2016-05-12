@@ -46,15 +46,20 @@
 	margin: auto;
 	float: left;
 }
-
+#container #container_bottom #slider-title{
+	width: 50%;
+	height: 30;
+	margin:auto;
+	position: relative;
+}
 #container #container_bottom #slider{
-	width: 60%;
+	width: 50%;
 	/*height: 100%;*/
 	margin: auto;
 }
 
 #container #container_bottom #slider-ticks{
-	width: 70%;
+	width: 60%;
 	height:40px;
 	position: relative;
 	margin: auto;
