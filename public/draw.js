@@ -2,7 +2,7 @@ function draw(data){
 	global_data = data;
 	inst_label();
 	slider(data);
-	updatePlot();
+	initPlot();
 }
 
 function slider(data){
@@ -89,8 +89,37 @@ function slider(data){
 }
 
 function updatePlot(){
-	$("#plot").remove();
+	d3.select("#title").select("H3").text("Grade Rate, Pell, Year = " + state.year);
+	var div = d3.select("#canvas").append("div").attr("id","plot");
+	var W = $("#canvas").width();
+	var H = $("#canvas").height();
+	var margin = {top: 20, right: 60, bottom: 40, left: 60};
+	var width = W - margin.left - margin.right;
+	var height = H - margin.top - margin.bottom;
 
+	var x = d3.scale.linear().range([0, width]).domain([-10,110]);
+	var y = d3.scale.linear().range([height, 0]).domain([-10,110]);
+
+	d3.selectAll(".dot")
+	/*.attr("r", function(d){
+		return Math.ceil(Math.log(Math.max(2, d["NumStudents"][state.year]/10)));
+	})*/
+	.transition() 
+	.attr("cx", function(d){return x(d["GradRate"][state.year])})
+	.attr("cy", function(d){return y(d["Pell"][state.year])})
+	.attr('stroke', 'gray')
+	.attr('stroke-width', 0.5)
+	.attr("fill", function(d){
+		return color[d.InstSector - 1];
+	});
+}
+
+function initPlot(){
+	//$("#plot").remove();
+
+	d3.select("#title").select("H3").text("Grade Rate, Pell, Year = " + state.year);
+
+	d3.selectAll("#plot").remove();
 	var tip = d3.tip()
 	.attr('class', 'd3-tip')
 	.offset([-10, 0])
@@ -101,16 +130,18 @@ function updatePlot(){
 	var div = d3.select("#canvas").append("div").attr("id","plot");
 	var W = $("#canvas").width();
 	var H = $("#canvas").height();
-	var margin = {top: 60, right: 60, bottom: 40, left: 60};
+	var margin = {top: 20, right: 60, bottom: 40, left: 60};
 	var width = W - margin.left - margin.right;
 	var height = H - margin.top - margin.bottom;
 
 	var x = d3.scale.linear().range([0, width]).domain([-10,110]);
 	var y = d3.scale.linear().range([height, 0]).domain([-10,110]);
 	var xAxis = d3.svg.axis().scale(x).orient("bottom")
-	.innerTickSize(-height);
+	.innerTickSize(-height)
+	.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 	var yAxis = d3.svg.axis().scale(y).orient("left")
-	.innerTickSize(-width);
+	.innerTickSize(-width)
+	.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 
 	var svg = div.append("svg")
 	.attr("width", W)
@@ -230,6 +261,6 @@ function inst_label(){
 			.attr('stroke', 'black');
 		}
 
-		updatePlot();
+		initPlot();
 	});
 }

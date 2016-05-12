@@ -33,12 +33,19 @@
 	float: left;
 }
 
-#container #container_up #canvas{
+#container #container_up #view{
 	width: 60%;
 	height: 100%;
 	margin: auto;
 	float: left;
 }
+#container #container_up #view #canvas{
+	width: 100%;
+	height: calc(100% - 50px);
+	margin: auto;
+	float: left;
+}
+
 
 #container #container_up #leggend{
 	width: 20%;
