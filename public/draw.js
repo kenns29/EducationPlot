@@ -20,7 +20,19 @@ function slider(data){
 			console.log(ui.value);
 			updatePlot();
 		}
+	});
+
+	d3.select('#slider-ticks').selectAll('span')
+	.data(d3.range(yearRange[0], yearRange[1] + 1, 1))
+	.enter().append('span')
+	.style('position', 'absolute')
+	.style('left', function(d, i){
+		var p = 100 / (yearRange[1] - yearRange[0]);
+		return i * p + '%';
 	})
+	.html(function(d, i){
+		return d;
+	});
 
 	function getYearRange(data){
 		var min = new Date().getFullYear();
@@ -179,7 +191,6 @@ function inst_label(){
 			.attr('stroke', 'black');
 		}
 
-		
 		updatePlot();
 	});
 }

@@ -43,6 +43,12 @@
 	margin: auto;
 }
 
+#container #container_bottom #slider-ticks{
+	width: 60%;
+	height:30px;
+	position: relative;
+	margin: auto;
+}
 
 /*
 *	Utilities
