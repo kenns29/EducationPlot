@@ -68,7 +68,7 @@ router.get('/loaddata', function(req, res){
 
 		function str2num(str){
 			if(str === ''){
-				return  0;
+				return  -1;
 			}
 			else{
 				return Number(str);

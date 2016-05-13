@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="lib/leaflet-0.7.3/leaflet.css" />
 <link rel="stylesheet" href="lib/awesome-bootstrap-checkbox.css" />
 <link rel="stylesheet" href="lib/bootstrap-table/bootstrap-table.css" />
-<link rel="stylesheet" href="main.css"/>
+<link rel="stylesheet" href="css/main.css"/>
 
 <script type="text/javascript" src="lib/async/async.js"></script>
 <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
@@ -28,7 +28,19 @@
 
 <div id = "container">
 	<div id="container_up">
-		<div id = "control"></div>
+		<div id = "control">
+			<div id = "school-type-selection-control"></div>
+			<div id = "data-control">
+				<div class="checkbox checkbox-primary" style="left:50%;">
+					<input id = "filter-missing-data-checkbox" type="checkbox" class="styled">
+					<label for = "filter-missing-data-checkbox">Filter Missing Data</label>
+				</div>
+				<div class="checkbox checkbox-primary" style="left:50%;">
+					<input id = "show-mean-std-checkbox" type = "checkbox" class = "styled">
+					<label for = "show-mean-std-checkbox">Show Mean and Std</label>
+				</div>
+			</div>
+		</div>
 		<div id = "view">
 			<div id = "title" style="height: 50px; text-align: center"><H3></H3></div>
 			<div id = "canvas"></div>
@@ -44,8 +56,11 @@
 	</div>
 </div>
 
-<script type="text/javascript" src = "init.js"></script>
-<script type="text/javascript" src = "draw.js"></script>
-<script type="text/javascript" src = "global_variable.js"></script>
+<script type="text/javascript" src = "js/global_variable.js"></script>
+<script type="text/javascript" src = "js/ScatterPlot.js"></script>
+<script type="text/javascript" src = "js/draw.js"></script>
+<script type="text/javascript" src = "js/UI.js"></script>
+<script type="text/javascript" src = "js/init.js"></script>
+
 </body>
 </html>

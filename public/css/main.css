@@ -33,6 +33,15 @@
 	float: left;
 }
 
+#container #container_up #control #school-type-selection-control{
+	width: 100%;
+	height: 30%;
+}
+
+#container #container_up #control #data-control{
+	width:100%;
+	height: 30%;
+}
 #container #container_up #view{
 	width: 60%;
 	height: 100%;
@@ -102,4 +111,20 @@
   margin: -1px 0 0 0;
   top: 100%;
   left: 0;
+}
+
+/* Fix Awesome Checkbox */
+input[type="checkbox"].styled:checked + label:after,
+input[type="radio"].styled:checked + label:after,
+.checkbox input[type=checkbox]:checked + label:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e013";
+}
+
+input[type="checkbox"].styled:checked label:after,
+input[type="radio"].styled:checked label:after,
+.checkbox label:after {
+    padding-left: 3px;
+    padding-top: 2px;
+    font-size: 9px;
 }

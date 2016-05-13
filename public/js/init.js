@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var url = 'http://localhost:3000/loaddata';
+    var url = service_url + 'loaddata';
     var config = {
     };
 
@@ -11,7 +11,6 @@ $(document).ready(function(){
         beforeSend: function (jqXHR, settings) {
         },
         success: function (data, textStatus, jqXHR) {
-            console.log('data', data);
             draw(data);
         },
         error: function (jqXHR, textStatus, message) {
