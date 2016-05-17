@@ -11,4 +11,5 @@ var opt = {
 };
 
 var color = ['#7fc97f','#beaed4','#fdc086'];
+var color_deep = ["#4daf4a","#984ea3", "#ff7f00"];
 var scatterPlot = null;

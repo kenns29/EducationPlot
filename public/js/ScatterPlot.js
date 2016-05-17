@@ -91,6 +91,84 @@ function ScatterPlot(){
 		//current dots
 		var dotUpdate = svg.selectAll('.dot');
 
+		//draw mean and std
+		if(opt.show_mean_std == true){
+			d3.selectAll(".meanstd_pell").remove();
+			d3.selectAll(".meanstd_gradrate").remove();
+			meanStd = calMeanStd(data);
+			GradeRate_meanStd = [];
+			Pell_meanStd = [];
+			meanStd.forEach(function(d){
+				if(d.variable == "GradRate") GradeRate_meanStd.push(d);
+				if(d.variable == "Pell") Pell_meanStd.push(d);
+			})
+
+			//mean	for pell		
+			var meanstd_svg = svg.selectAll(".meanstd_pell").data(Pell_meanStd).enter()
+			.append("svg").attr("class","meanstd_pell");
+			meanstd_svg
+			.append("line")
+			.attr("stroke-width", 3)
+			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
+			.attr("x1", function(d){return x(d.mean);})
+			.attr("y1", y(-10))
+			.attr("x2", function(d){return x(d.mean);})
+			.attr("y2", y(110));
+
+			meanstd_svg.append("line")
+			.attr("stroke-width", 2)
+			.attr("stroke-dasharray",("3,3"))
+			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
+			.attr("x1", function(d){return x(d.mean - d.std);})
+			.attr("y1", y(-10))
+			.attr("x2", function(d){return x(d.mean - d.std);})
+			.attr("y2", y(110));
+			meanstd_svg.append("line")
+			.attr("stroke-width", 2)
+			.attr("stroke-dasharray",("3,3"))
+			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
+			.attr("x1", function(d){return x(d.mean + d.std);})
+			.attr("y1", y(-10))
+			.attr("x2", function(d){return x(d.mean + d.std);})
+			.attr("y2", y(110));
+			
+			//mean for grade rate
+			var meanstd2_svg = svg.selectAll(".meanstd_gradrate").data(GradeRate_meanStd).enter()
+			.append("svg").attr("class","meanstd_gradrate");
+			meanstd2_svg.append("line")
+			.attr("stroke-width", 3)
+			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
+			.attr("x1",x(-10))
+			.attr("x2", x(110))			
+			.attr("y1", function(d){return y(d.mean);})
+			.attr("y2", function(d){return y(d.mean);})
+
+			meanstd2_svg.append("line")
+			.attr("stroke-width", 2)
+			.attr("stroke-dasharray",("3,3"))
+			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
+			.attr("x1",x(-10))
+			.attr("x2", x(110))			
+			.attr("y1", function(d){return y(d.mean - d.std);})
+			.attr("y2", function(d){return y(d.mean - d.std);})
+
+			meanstd2_svg.append("line")
+			.attr("stroke-width", 2)
+			.attr("stroke-dasharray",("3,3"))
+			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
+			.attr("x1",x(-10))
+			.attr("x2", x(110))			
+			.attr("y1", function(d){return y(d.mean + d.std);})
+			.attr("y2", function(d){return y(d.mean + d.std);})
+
+
+			
+		}else{
+			d3.selectAll(".meanstd_pell").remove();
+			d3.selectAll(".meanstd_gradrate").remove();
+		}
+
+
 		dotUpdate
 		.transition()
 		.duration(500)
@@ -115,12 +193,7 @@ function ScatterPlot(){
 			return d.fade == true ? "gray" : color[d.InstSector - 1];
 		});
 		
-		//draw mean and std
 		
-		if(opt.show_mean_std == true){
-			meanStd = calMeanStd(data);
-		}
-
 
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
