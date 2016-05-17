@@ -1,10 +1,17 @@
 function draw(data){
+	console.log(data);
+	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
 	inst_label();
 	slider(data);
 }
 
-
+function preprocess(data){
+	data.forEach(function(d){
+		d["fade"] = false;
+	})
+	console.log(data);
+}
 /*
 * Institution type label
 */

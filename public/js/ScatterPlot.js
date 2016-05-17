@@ -1,4 +1,5 @@
 function ScatterPlot(){
+	var self = this;
 	var graph_container = '#canvas';
 	var title_container = '#title';
 	var data;
@@ -80,7 +81,7 @@ function ScatterPlot(){
 		var dotEnter = dotSel.enter().append('circle').attr('class', 'dot')
 		.attr('stroke', 'gray')
 		.attr('stroke-width', 0.5)
-		.attr("fill", function(d){
+		.style("fill", function(d){
 			return color[d.InstSector - 1];
 		});
 
@@ -105,16 +106,55 @@ function ScatterPlot(){
 			var value = d["Pell"][state.year];
 			return value >= 0 ? y(value) : y(0);
 		})
+		.style("opacity", function(d) {
+			if(d.fade == true){
+				return 0.4;
+			}else return 1;
+		})
+		.style("fill", function(d){
+			return d.fade == true ? "gray" : color[d.InstSector - 1];
+		});
 		
 		
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);
+		dotUpdate.on('click',function(d){
+			tip.hide();
+			InstClick(d);
 
+		});
 		return this;
 	};
 
-
+	function InstClick(d){
+		console.log(d);
+		//fade out other institut
+		var id = d.UnitID;
+		var fade = d.fade;
+		if(fade == false){
+			data.forEach(function(dd){
+				if(dd.UnitID != id){
+					dd.fade = true;
+				}else{
+					dd.fade = "clicked";
+				}
+			})
+		}else if(fade == "clicked"){
+			data.forEach(function(dd){
+				dd.fade = false;
+			})
+		}else if(fade == true){
+			data.forEach(function(dd) {
+				if(dd.UnitID != id){
+					dd.fade = true;
+				}else{
+					dd.fade = "clicked";
+				}
+			})
+		}
+		self.update();
+	}
 	/*
 	* Accessors
 	*/
