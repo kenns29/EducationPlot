@@ -57,6 +57,7 @@ function ScatterPlot(){
 	};
 
 	this.update = function(){
+		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
 		//define the tooltip
 		var tip = d3.tip()
 		.attr('class', 'd3-tip')
