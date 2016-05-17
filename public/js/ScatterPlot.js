@@ -127,6 +127,13 @@ function ScatterPlot(){
 		return this;
 	};
 
+	this.showTrajectory(){
+		var clicked_point = data.filter(function(d){
+			return d.fade == 'clicked';
+		})[0];
+		
+	};
+
 	function InstClick(d){
 		console.log(d);
 		//fade out other institut
