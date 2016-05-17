@@ -40,7 +40,7 @@ function ScatterPlot(){
 		.attr("x", width)
 		.attr("y", 25)
 		.style("text-anchor","end")
-		.text("Grad Rate (%)");
+		.text("Pell (%)");
 
 		//y axis
 		svg.append("g")
@@ -52,7 +52,7 @@ function ScatterPlot(){
 		.attr("y",6)
 		.attr("dy","-4em")
 		.style("text-anchor", "end")
-		.text("Pell (%)");
+		.text("Grad Rate (%)");
 
 		return this;
 	};
@@ -99,11 +99,11 @@ function ScatterPlot(){
 			return Math.ceil(Math.log(Math.max(2, value/10)));
 		})
 		.attr("cx", function(d){
-			var value = d["GradRate"][state.year];
+			var value = d["Pell"][state.year];
 			return value >= 0 ? x(value) : x(0);
 		})
 		.attr("cy", function(d){
-			var value = d["Pell"][state.year];
+			var value = d["GradRate"][state.year];
 			return value >= 0 ? y(value) : y(0);
 		})
 		.style("opacity", function(d) {
@@ -115,7 +115,13 @@ function ScatterPlot(){
 			return d.fade == true ? "gray" : color[d.InstSector - 1];
 		});
 		
+		//draw mean and std
 		
+		if(opt.show_mean_std == true){
+			meanStd = calMeanStd(data);
+		}
+
+
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);

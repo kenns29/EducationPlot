@@ -11,3 +11,11 @@ $('#filter-missing-data-checkbox').change(function(){
 	scatterPlot.update();
 });
 
+$('#show-mean-std-checkbox').change(function(){
+	if($(this).is(':checked')){
+		opt.show_mean_std = true;
+	}else{
+		opt.show_mean_std = false;
+	}
+	scatterPlot.update();
+})
