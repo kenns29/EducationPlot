@@ -376,13 +376,14 @@ function ScatterPlot(){
 			.attr('stroke', 'black')
 			.attr('stroke-width', 1);
 		}
-
+		return this;
 	};
 
 	this.removeTrajectory = function(){
 		svg.selectAll('.t-dot').remove();
 		svg.selectAll('.t-link').remove();
 		// svg.selectAll('defs').remove();
+		return this;
 	};
 
 	this.search = function(institution){
@@ -403,9 +404,8 @@ function ScatterPlot(){
 				}
 			})
 			self.update();			
-		}
-		
-	}
+		}	
+	};
 
 	function InstClick(d){
 		console.log(d);
