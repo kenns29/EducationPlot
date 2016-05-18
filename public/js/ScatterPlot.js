@@ -2,12 +2,17 @@ function ScatterPlot(){
 	var self = this;
 	var graph_container = '#canvas';
 	var title_container = '#title';
+	var legend_container = '#dot-legend-container';
 	var data;
 	var W, H, margin, width, height;
 	var svg;
 	var xAxis, yAxis, x, y;
+	var mode = ScatterPlot.SCATTER;
 	this.init = function(){
+		//title
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
+		
+		//size
 		W = $(graph_container).width();
 		H = $(graph_container).height();
 		margin = {top: 20, right: 60, bottom: 40, left: 60};
@@ -54,10 +59,95 @@ function ScatterPlot(){
 		.style("text-anchor", "end")
 		.text("Grad Rate (%)");
 
+		//init the dot legend
+		(function(){
+			var legend_width = $(legend_container).width();
+			var legend_height = $(legend_container).height();
+			var legend_margin = {top:100, bottom:20, left:10, right:10};
+			var legend_svg = d3.select(legend_container).append('svg')
+			.attr('width', legend_width).attr('height', legend_height);
+
+			var dot_min = Infinity, dot_max = -Infinity;
+			for(var i = 0; i < data.length; i++){
+				for(var j in data[i].NumStudents){
+					if(data[i].NumStudents[j] < dot_min){
+						dot_min = data[i].NumStudents[j];
+					} 
+					if(data[i].NumStudents[j] > dot_max){
+						dot_max = data[i].NumStudents[j];
+					}
+				}
+			}
+			console.log(dot_min, dot_max);
+			if(dot_min < 40) dot_min  = 40;
+			var r_max = Math.ceil(Math.log(dot_max/10));
+			var r_min = Math.ceil(Math.log(dot_min/10));
+
+			var r_range = [];
+			var cum = 0;
+			for(var i = r_min; i < r_max; i+=3){
+				var v = Math.ceil(Math.exp(i) * 10);
+				var n = v.toString().length - 1;
+				v = d3.round(v, -n);
+				var r = Math.log(v/10);
+				r_range.push({
+					'r' : r,
+					'cum' : cum 
+				});
+				cum += r*2;
+			}
+
+			if(r_max - r_range[r_range.length-1].r > 0){
+				r_range.push({
+					r : r_max,
+					cum : cum
+				});
+			}
+			var numDots = 5;
+			var interval = (dot_max - dot_min) / numDots;
+
+			var legend_g = legend_svg.append('g')
+			.attr('transform', 'translate(' + [legend_margin.left, legend_margin.top] + ')');
+
+			var dot_enter = legend_g.selectAll('.dot-legend')
+			.data(r_range)
+			.enter()
+			.append('g').attr('class', '.dot-legend')
+			.attr('transform', function(d, i){
+				return 'translate(' + [r_max, d.cum + d.r + 20*i] + ')';
+			});
+			
+			dot_enter.append('circle')
+			.attr('cx', 0)
+			.attr('cy', 0)
+			.attr('r', function(d){
+				return d.r;
+			})
+			.attr('fill', function(d){
+				return 'white';
+			})
+			.attr('stroke', 'black').attr('stroke-width', 1);
+
+			dot_enter.append('text')
+			.attr('text-anchor', 'start')
+			.attr('dominant-baseline', 'middle')
+			.attr('x', r_max*2 + 5)
+			.attr('y', 2)
+			.text(function(d, i){
+				if(i == r_range.length - 1){
+					return Math.round(dot_max);
+				}
+				else {
+					var value = Math.exp(d.r) * 10;
+					return Math.round(value);
+				}
+			});
+		})();
 		return this;
 	};
 
 	this.update = function(){
+		this.removeTrajectory();
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
 		//define the tooltip
 		var tip = d3.tip()
@@ -133,11 +223,66 @@ function ScatterPlot(){
 		return this;
 	};
 
-	this.showTrajectory(){
-		var clicked_point = data.filter(function(d){
+	this.showTrajectory = function(){
+		var clicked_d = data.filter(function(d){
 			return d.fade == 'clicked';
 		})[0];
+		mode = ScatterPlot.TREJECTORY;
+		svg.selectAll('.dot').remove();
+
+		//make dots and links
+		var dat = [];
+		for(var i = 2008; i <= 2014; i++){
+			dat.push({
+				'x' : x(clicked_d.Pell[i.toString()]),
+				'y' : y(clicked_d.GradRate[i.toString()]),
+				'r' : Math.ceil(Math.log(Math.max(2, Math.max(0, clicked_d.NumStudents[i.toString()])/10))),
+				'year' : i,
+				'InstSector' : clicked_d.InstSector
+			});
+		}
+
+		var link = [];
+		for(var i = 0; i < dat.length - 1; i++){
+			link.push({
+				'source' : dat[i],
+				'target' : dat[i+1]
+			});
+		}
+
+		//draw dots and links
+		var diagonal = d3.svg.diagonal().source(function(d){return {x : d.source.x, y:d.source.y};})
+		.target(function(d){return {x : d.target.x, y:d.target.y};})
+		.projection(function(d){return [d.x, d.y];});
+
+		svg.selectAll('.t-link').data(link).enter().append('path')
+		.attr('class', 't-link')
+		.attr('d', diagonal)
+		.attr('stroke', 'black')
+		.attr('stroke-width', 1)
+		.attr('fill', 'none');
+
+		svg.selectAll('.t-dot').data(dat)
+		.enter().append('circle')
+		.attr('class', 't-dot')
+		.attr('cx', function(d){
+			return d.x;
+		}).attr('cy', function(d){
+			return d.y;
+		})
+		.attr('r', function(d){
+			return d.r;
+		})
+		.style("fill", function(d){
+			return d.fade == true ? "gray" : color[d.InstSector - 1];
+		});
 		
+
+	};
+
+	this.removeTrajectory = function(){
+		svg.selectAll('.t-dot').remove();
+		svg.selectAll('.t-link').remove();
 	};
 
 	function InstClick(d){
@@ -168,6 +313,7 @@ function ScatterPlot(){
 		}
 		self.update();
 	}
+
 	/*
 	* Accessors
 	*/
@@ -181,3 +327,6 @@ function ScatterPlot(){
 		return (arguments.length > 0) ? (title_container = _, this) : title_container;
 	};
 }
+
+ScatterPlot.SCATTER = 'scatter';
+ScatterPlot.TREJECTORY = 'trejectory';

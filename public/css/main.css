@@ -42,6 +42,12 @@
 	width:100%;
 	height: 30%;
 }
+
+#container #container_up #control #trajectory-control{
+	width: 100%;
+	height: 20%;
+}
+
 #container #container_up #view{
 	width: 60%;
 	height: 100%;
@@ -62,15 +68,10 @@
 	margin: auto;
 	float: left;
 }
-
-#container #container_up #legend #legend-control{
-	position: absolute;
-	top:20%;
-	width: 100%;
-	height: 20%;
-	margin: auto;
+#container #container_up #legend #dot-legend-container{
+	width : 100%;
+	height: 50%;
 }
-
 #container #container_bottom #slider-title{
 	width: 50%;
 	height: 30;

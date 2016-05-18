@@ -18,4 +18,8 @@ $('#show-mean-std-checkbox').change(function(){
 		opt.show_mean_std = false;
 	}
 	scatterPlot.update();
-})
+});
+
+$('#show-trajectory-button').click(function(){
+	scatterPlot.showTrajectory();
+});
