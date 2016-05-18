@@ -78,7 +78,6 @@ function ScatterPlot(){
 					}
 				}
 			}
-			console.log(dot_min, dot_max);
 			if(dot_min < 40) dot_min  = 40;
 			var r_max = Math.ceil(Math.log(dot_max/10));
 			var r_min = Math.ceil(Math.log(dot_min/10));
@@ -383,6 +382,7 @@ function ScatterPlot(){
 		svg.selectAll('.t-dot').remove();
 		svg.selectAll('.t-link').remove();
 		// svg.selectAll('defs').remove();
+		$('#show-trajectory-button').removeClass('active');
 		return this;
 	};
 
