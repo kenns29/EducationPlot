@@ -53,6 +53,7 @@
 }
 #container #container_up #control #trajectory-control #trajectory-button-div{
 	left : 50%;
+	float:right;
 }
 #container #container_up #view{
 	width: 60%;

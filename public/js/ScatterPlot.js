@@ -147,6 +147,7 @@ function ScatterPlot(){
 	};
 
 	this.update = function(){
+		mode = ScatterPlot.SCATTER;
 		this.removeTrajectory();
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
 		//define the tooltip
@@ -299,63 +300,89 @@ function ScatterPlot(){
 		var clicked_d = data.filter(function(d){
 			return d.fade == 'clicked';
 		})[0];
-		mode = ScatterPlot.TREJECTORY;
-		svg.selectAll('.dot').remove();
+		if(clicked_d){
+			console.log('clicked_d', clicked_d);
+			mode = ScatterPlot.TREJECTORY;
+			svg.selectAll('.dot').remove();
 
-		//make dots and links
-		var dat = [];
-		for(var i = 2008; i <= 2014; i++){
-			dat.push({
-				'x' : x(clicked_d.Pell[i.toString()]),
-				'y' : y(clicked_d.GradRate[i.toString()]),
-				'r' : Math.ceil(Math.log(Math.max(2, Math.max(0, clicked_d.NumStudents[i.toString()])/10))),
-				'year' : i,
-				'InstSector' : clicked_d.InstSector
-			});
+			//make dots and links
+			var dat = [];
+			var index = 0;
+			for(var i = 2008; i <= 2014; i++){
+				dat.push({
+					'x' : x(clicked_d.Pell[i.toString()]),
+					'y' : y(clicked_d.GradRate[i.toString()]),
+					'r' : Math.ceil(Math.log(Math.max(2, Math.max(0, clicked_d.NumStudents[i.toString()])/10))),
+					'year' : i,
+					'InstSector' : clicked_d.InstSector,
+					'index' : index++
+				});
+			}
+
+			var link = [];
+			for(var i = 0; i < dat.length - 1; i++){
+				link.push({
+					'source' : dat[i],
+					'target' : dat[i+1]
+				});
+			}
+
+			//draw dots and links
+			var diagonal = d3.svg.diagonal().source(function(d){return {x : d.source.x, y:d.source.y};})
+			.target(function(d){return {x : d.target.x, y:d.target.y};})
+			.projection(function(d){return [d.x, d.y];});
+
+			// svg.append('defs')
+			// .append('marker')
+			// .attr('id', 'arrow-marker')
+			// .attr('markerWidth', 10)
+			// .attr('markerHeight', 10)
+			// .attr('refX', 0)
+			// .attr('refY', 3)
+			// .attr('markerUnits', 'strokeWidth')
+			// .attr('orient', 'auto')
+			// .append('path')
+			// .attr('d', 'M0,0 L0,6 L9,3 z')
+			// .attr('fill', 'black');
+			
+			svg.selectAll('.t-link').data(link).enter().append('path')
+			.attr('class', 't-link')
+			.attr('d', diagonal)
+			.attr('stroke', 'black')
+			.attr('stroke-width', 1)
+			.attr('fill', 'none');
+			// .attr('marker-end', function(d, i){
+			// 	if(i == link.length - 1){
+			// 		return 'url(#arrow-marker)';
+			// 	}
+			// 	return null;
+			// });
+
+
+			svg.selectAll('.t-dot').data(dat)
+			.enter().append('circle')
+			.attr('class', 't-dot')
+			.attr('cx', function(d){
+				return d.x;
+			}).attr('cy', function(d){
+				return d.y;
+			})
+			.attr('r', function(d){
+				return d.r;
+			})
+			.style("fill", function(d){
+				return d.fade == true ? "gray" : color[d.InstSector - 1];
+			})
+			.attr('stroke', 'black')
+			.attr('stroke-width', 1);
 		}
-
-		var link = [];
-		for(var i = 0; i < dat.length - 1; i++){
-			link.push({
-				'source' : dat[i],
-				'target' : dat[i+1]
-			});
-		}
-
-		//draw dots and links
-		var diagonal = d3.svg.diagonal().source(function(d){return {x : d.source.x, y:d.source.y};})
-		.target(function(d){return {x : d.target.x, y:d.target.y};})
-		.projection(function(d){return [d.x, d.y];});
-
-		svg.selectAll('.t-link').data(link).enter().append('path')
-		.attr('class', 't-link')
-		.attr('d', diagonal)
-		.attr('stroke', 'black')
-		.attr('stroke-width', 1)
-		.attr('fill', 'none');
-
-		svg.selectAll('.t-dot').data(dat)
-		.enter().append('circle')
-		.attr('class', 't-dot')
-		.attr('cx', function(d){
-			return d.x;
-		}).attr('cy', function(d){
-			return d.y;
-		})
-		.attr('r', function(d){
-			return d.r;
-		})
-		.style("fill", function(d){
-			return d.fade == true ? "gray" : color[d.InstSector - 1];
-		})
-		.attr('stroke', 'black')
-		.attr('stroke-width', 1);
 
 	};
 
 	this.removeTrajectory = function(){
 		svg.selectAll('.t-dot').remove();
 		svg.selectAll('.t-link').remove();
+		// svg.selectAll('defs').remove();
 	};
 
 	this.search = function(institution){
@@ -423,6 +450,9 @@ function ScatterPlot(){
 	};
 	this.title_container = function(_){
 		return (arguments.length > 0) ? (title_container = _, this) : title_container;
+	};
+	this.mode = function(_){
+		return mode;
 	};
 }
 

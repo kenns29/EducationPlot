@@ -22,8 +22,9 @@ $('#show-mean-std-checkbox').change(function(){
 
 $('#show-trajectory-button').click(function(){
 	if(!$(this).hasClass('active')){
-		$(this).addClass('active')
 		scatterPlot.showTrajectory();
+		if(scatterPlot.mode() == ScatterPlot.TREJECTORY)
+			$(this).addClass('active');
 	}
 	else{
 		$(this).removeClass('active');
