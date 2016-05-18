@@ -131,7 +131,7 @@ function ScatterPlot(){
 			.attr("y1", y(-10))
 			.attr("x2", function(d){return x(d.mean + d.std);})
 			.attr("y2", y(110));
-			
+
 			//mean for grade rate
 			var meanstd2_svg = svg.selectAll(".meanstd_gradrate").data(GradeRate_meanStd).enter()
 			.append("svg").attr("class","meanstd_gradrate");
@@ -206,6 +206,27 @@ function ScatterPlot(){
 		return this;
 	};
 
+	this.search = function(institution){
+		console.log(institution);
+		if(institution == "All"){
+			console.log("All");
+			data.forEach(function(d){
+				d.fade = false;
+			})
+			self.update();
+		}else{
+			var d;
+			data.forEach(function(d){
+				if(d.InstName == institution){
+					d.fade = "clicked";
+				}else{
+					d.fade = true;
+				}
+			})
+			self.update();			
+		}
+		
+	}
 	function InstClick(d){
 		console.log(d);
 		//fade out other institut

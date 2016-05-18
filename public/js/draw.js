@@ -2,6 +2,7 @@ function draw(data){
 	console.log(data);
 	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
+	init_search(data);
 	inst_label();
 	slider(data);
 }
@@ -15,6 +16,36 @@ function preprocess(data){
 /*
 * Institution type label
 */
+
+function init_search(data){
+
+	var institution = ["All"];
+	data.forEach(function(d){
+		institution.push(d.InstName);
+	})
+	$("#institution").val("All");
+	var institutionList = $("#institution").autocomplete({
+		source:institution,
+		change:function(event, ui){			
+			if(this.value == ""){
+				scatterPlot.search("All");
+			}else{
+				scatterPlot.search(this.value);
+			}
+			
+		},		
+		select:function(event, ui){			
+			if(ui.item == null){
+				scatterPlot.search("All");
+			}else{
+				scatterPlot.search(ui.item.value);
+			}
+			//institutionList.autocomplete('option','change').call(institutionList);
+		}
+	});
+	
+}
+
 function inst_label(){
 	var width = $('#school-type-selection-control').width();
 	var height = $('#school-type-selection-control').height();
