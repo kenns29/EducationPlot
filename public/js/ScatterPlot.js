@@ -124,7 +124,7 @@ function ScatterPlot(){
 				return d.r;
 			})
 			.attr('fill', function(d){
-				return 'white';
+				return 'gray';
 			})
 			.attr('stroke', 'black').attr('stroke-width', 1);
 
@@ -258,6 +258,15 @@ function ScatterPlot(){
 			d3.selectAll(".meanstd_gradrate").remove();
 		}
 
+		dotUpdate
+		.style("opacity", function(d) {
+			if(d.fade == true){
+				return 0.4;
+			}else return 1;
+		})
+		.style("fill", function(d){
+			return d.fade == true ? "gray" : color[d.InstSector - 1];
+		});
 
 		dotUpdate
 		.transition()
@@ -273,25 +282,15 @@ function ScatterPlot(){
 		.attr("cy", function(d){
 			var value = d["GradRate"][state.year];
 			return value >= 0 ? y(value) : y(0);
-		})
-		.style("opacity", function(d) {
-			if(d.fade == true){
-				return 0.4;
-			}else return 1;
-		})
-		.style("fill", function(d){
-			return d.fade == true ? "gray" : color[d.InstSector - 1];
 		});
 		
-		
-
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);
 		dotUpdate.on('click',function(d){
 			tip.hide();
 			InstClick(d);
-
+			
 		});
 		return this;
 	};
@@ -348,8 +347,9 @@ function ScatterPlot(){
 		})
 		.style("fill", function(d){
 			return d.fade == true ? "gray" : color[d.InstSector - 1];
-		});
-		
+		})
+		.attr('stroke', 'black')
+		.attr('stroke-width', 1);
 
 	};
 

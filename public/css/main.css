@@ -35,19 +35,21 @@
 
 #container #container_up #control #school-type-selection-control{
 	width: 100%;
-	height: 30%;
+	height: 180px;
 }
 
 #container #container_up #control #data-control{
 	width:100%;
-	height: 30%;
+	height: 70px;
 }
 
 #container #container_up #control #trajectory-control{
 	width: 100%;
 	height: 20%;
 }
-
+#container #container_up #control #trajectory-control #trajectory-button-div{
+	left : 50%;
+}
 #container #container_up #view{
 	width: 60%;
 	height: 100%;

@@ -21,5 +21,12 @@ $('#show-mean-std-checkbox').change(function(){
 });
 
 $('#show-trajectory-button').click(function(){
-	scatterPlot.showTrajectory();
+	if(!$(this).hasClass('active')){
+		$(this).addClass('active')
+		scatterPlot.showTrajectory();
+	}
+	else{
+		$(this).removeClass('active');
+		scatterPlot.update();
+	}
 });
