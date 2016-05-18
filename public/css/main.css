@@ -47,6 +47,10 @@
 	width: 100%;
 	height: 20%;
 }
+#container #container_up #control #show-selection-div{
+	width:100%;
+	height:40px;
+}
 #container #container_up #control #trajectory-control #trajectory-button-div{
 	left : 50%;
 }
