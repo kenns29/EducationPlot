@@ -1,3 +1,8 @@
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
 var service_url = 'http://localhost:10081/';
 var inst_types = ['Public', 'Private not-for-profit', 'Private for-profit'];
 var state = {

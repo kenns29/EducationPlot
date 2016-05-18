@@ -288,6 +288,7 @@ function ScatterPlot(){
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);
 		dotUpdate.on('click',function(d){
+			d3.select(this).moveToFront();
 			tip.hide();
 			InstClick(d);
 			
