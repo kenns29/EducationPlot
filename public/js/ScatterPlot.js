@@ -332,6 +332,9 @@ function ScatterPlot(){
 			.target(function(d){return {x : d.target.x, y:d.target.y};})
 			.projection(function(d){return [d.x, d.y];});
 
+			/*
+			* Define the arrow
+			*/
 			// svg.append('defs')
 			// .append('marker')
 			// .attr('id', 'arrow-marker')
@@ -345,12 +348,13 @@ function ScatterPlot(){
 			// .attr('d', 'M0,0 L0,6 L9,3 z')
 			// .attr('fill', 'black');
 			
-			svg.selectAll('.t-link').data(link).enter().append('path')
-			.attr('class', 't-link')
-			.attr('d', diagonal)
-			.attr('stroke', 'black')
-			.attr('stroke-width', 1)
-			.attr('fill', 'none');
+			// svg.selectAll('.t-link').data(link).enter().append('path')
+			// .attr('class', 't-link')
+			// .attr('d', diagonal)
+			// .attr('stroke', 'black')
+			// .attr('stroke-width', 1)
+			// .attr('fill', 'none');
+
 			// .attr('marker-end', function(d, i){
 			// 	if(i == link.length - 1){
 			// 		return 'url(#arrow-marker)';
@@ -358,6 +362,13 @@ function ScatterPlot(){
 			// 	return null;
 			// });
 
+			var line = d3.svg.line().x(function(d){return d.x;}).y(function(d){return d.y;}).interpolate('cardinal')
+			svg.append('path')
+			.attr('class', 't-link')
+			.attr('d', line(dat))
+			.attr('stroke', 'black')
+			.attr('stroke-width', 1)
+			.attr('fill', 'none');
 
 			svg.selectAll('.t-dot').data(dat)
 			.enter().append('circle')
