@@ -1,24 +1,18 @@
 $(document).ready(function(){
-    var url = service_url + 'loaddata';
+    var data_url = service_url + 'loaddata';
+    var conf_url = service_url + 'loadconfs';
     var config = {
     };
 
-    $.ajax({
-        type: 'GET',
-        url: url,
-        data: config,
-        dataType: 'json',
-        beforeSend: function (jqXHR, settings) {
-        },
-        success: function (data, textStatus, jqXHR) {
-            draw(data);
-        },
-        error: function (jqXHR, textStatus, message) {
-            console.log(message);
-            console.log(textStatus);
-        },
-        complete: function (jqXHR, textStatus) {
-            console.log(textStatus);
-        }
+    var store = new Object();
+    $.when(
+        $.get(data_url, config, function(data) {
+            store.data = data;
+        }, 'json'),
+        $.get(conf_url, config, function(conf) {
+            store.conf = conf;
+        }, 'json')
+    ).then(function() {
+        draw(store.data, store.conf);
     });
-})
+});

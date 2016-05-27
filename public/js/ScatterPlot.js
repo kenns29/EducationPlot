@@ -162,7 +162,8 @@ function ScatterPlot(){
 		.data(data.filter(function(d, i){
 			var inst_sector_filter = state.InstSelections.has(inst_types[d.InstSector - 1]);
 			var missing_data_filter = opt.filter_missing_data ?  (d["GradRate"][state.year] >= 0 && d["Pell"][state.year] >= 0) : true;
-			return inst_sector_filter && missing_data_filter;
+			var ncaa_conf_filter = state.ConfSelections.size() == 0 || state.ConfSelections.has(d.InstConf);
+			return inst_sector_filter && missing_data_filter && ncaa_conf_filter;
 		}), function(d, i){
 			return d.UnitID;
 		});

@@ -20,7 +20,7 @@ router.get('/loaddata', function(req, res){
 
 		for(var i = 1;  i < rows.length ;i++){
 			var cells = rows[i].split(',');
-			var useful_indices = [2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+			var useful_indices = [2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 28];
 			var filter = (function(){
 				for(var j = 0; j < useful_indices.length; j++){
 					if(cells[useful_indices[j]] != ''){
@@ -60,7 +60,46 @@ router.get('/loaddata', function(req, res){
 						'2012' : str2num(cells[10]),
 						'2013' : str2num(cells[7]),
 						'2014' : str2num(cells[3])
-					}
+					},
+					InstConf : str2num(cells[28])
+				});
+			}
+		}
+		res.json(rdata);
+
+		function str2num(str){
+			if(str === ''){
+				return  -1;
+			}
+			else{
+				return Number(str);
+			}
+		}
+	});
+});
+
+router.get('/loadconfs', function(req, res){
+	fs.readFile('conferences.csv', 'utf8', function(err, contents){
+		var rdata = [];
+		var rows = contents.split('\n');
+		var header = rows[0].split(',');
+
+		for(var i = 1;  i < rows.length ;i++){
+			var cells = rows[i].split(',');
+			var useful_indices = [0, 1, 2];
+			var filter = (function(){
+				for(var j = 0; j < useful_indices.length; j++){
+					if(cells[useful_indices[j]] != ''){
+						return false;
+					}	
+				}
+				return true;
+			})();
+			if(!filter){
+				rdata.push({
+					Name : cells[0],
+					Short : cells[1],
+					Code : str2num(cells[2])
 				});
 			}
 		}

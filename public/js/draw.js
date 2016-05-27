@@ -1,9 +1,11 @@
-function draw(data){
+function draw(data, confs){
 	console.log(data);
+	console.log(confs);
 	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
 	init_search(data);
 	inst_label();
+	inst_confs(confs);
 	slider(data);
 }
 
@@ -125,6 +127,28 @@ function inst_label(){
 		}
 		scatterPlot.update();
 	});
+}
+
+/*
+   Conference dropdown
+ */
+function inst_confs(confs){
+	var dropdown = $("#conference-dropdown");
+	for(var key in confs) {
+		var element = $('<label style="display:block;"><input type="checkbox"/>' + confs[key].Name + '</label>');
+		element.attr("value", confs[key].Code);
+		element.click(function() {
+			var checkboxes = $("#conference-dropdown")[0].childNodes;
+			var selected_confs = [];
+			for(var i = 0; i < checkboxes.length; i++) {
+				if(checkboxes[i].childNodes[0].checked)
+					selected_confs.push(Number(checkboxes[i].getAttribute("value")));
+			}
+			state.ConfSelections = d3.set(selected_confs);
+			scatterPlot.update();
+		});
+		dropdown.append(element).end();
+	}
 }
 
 /*
