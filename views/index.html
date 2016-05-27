@@ -56,7 +56,18 @@
 		</div>
 		<div id = "view">
 			<div id = "title" style="height: 50px; text-align: center"><H3></H3></div>
-			<div id = "canvas"></div>
+			<ul class = "nav nav-pills">
+				<li role="presentation" class = "active"><a href="#scatter-plot-tab">Scatter Plot</a></li>
+				<li role="presentation"><a href="#treemap-tab">Treemap</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane" id = "scatter-plot-tab">
+					<div id = "canvas"></div>
+				</div>
+				<div class="tab-pane" id = "treemap-tab">
+					<div id = "treemap-canvas"></div>
+				</div>
+			</div>
 		</div>
 		<div id = "legend">	
 			<div id = "dot-legend-container"></div>
