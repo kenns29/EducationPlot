@@ -57,14 +57,14 @@
 		<div id = "view">
 			<div id = "title" style="height: 50px; text-align: center"><H3></H3></div>
 			<ul class = "nav nav-pills">
-				<li role="presentation" class = "active"><a href="#scatter-plot-tab">Scatter Plot</a></li>
-				<li role="presentation"><a href="#treemap-tab">Treemap</a></li>
+				<li role="presentation" class = "active"><a data-toggle="tab" href="#scatter-plot-tab">Scatter Plot</a></li>
+				<li role="presentation"><a data-toggle="tab" href="#treemap-tab">Treemap</a></li>
 			</ul>
-			<div class="tab-content">
-				<div class="tab-pane" id = "scatter-plot-tab">
+			<div id = "main-view" class="tab-content">
+				<div class="tab-pane fade in active" id = "scatter-plot-tab">
 					<div id = "canvas"></div>
 				</div>
-				<div class="tab-pane" id = "treemap-tab">
+				<div class="tab-pane fade" id = "treemap-tab">
 					<div id = "treemap-canvas"></div>
 				</div>
 			</div>
