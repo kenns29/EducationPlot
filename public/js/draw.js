@@ -3,6 +3,7 @@ function draw(data, confs){
 	console.log(confs);
 	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
+	treemap = new Treemap().data(data).init().update();
 	init_search(data);
 	inst_label();
 	inst_confs(confs);
