@@ -168,6 +168,7 @@ function slider(data){
 		slide: function(event, ui){
 			state.year = ui.value;
 			scatterPlot.update();
+			treemap.update();
 		}
 	});
 

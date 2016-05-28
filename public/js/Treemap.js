@@ -26,7 +26,20 @@ function Treemap(){
 
 	this.update = function(){
 		
-		var color_scale = d3.scale.quantize().domain([0, 100]).range(['white','#d4b9da','#c994c7','#df65b0','#e7298a','#ce1256','#91003f']);
+		var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.offset([-10, 0])
+		.html(function(d) {
+			return "<span style='color:white'>" + d.name + "</span><span style = 'color:white'>" + d.GradRate +"</span>";
+		});
+
+		var color_scale = d3.scale.quantize().domain([0, 100]).range(['#d4b9da','#c994c7','#df65b0','#e7298a','#ce1256','#91003f']);
+		function color(d){
+			if(d === 0){
+				return 'white';
+			}
+			return color_scale(d);
+		}
 		var dat = {
 			'name' : 'root', 
 			'children' : data.filter(function(d, i){
@@ -41,17 +54,21 @@ function Treemap(){
 			})
 		};
 		
+		svg.call(tip);
 
 		var treemap = d3.layout.treemap()
 		.size([W, H]).sticky(true).value(function(d){
 			return d.size;
 		});
 
-		var treemap_nodes = treemap.nodes(dat);
-		console.log('treemap nodes', treemap_nodes);
+		// var treemap_nodes = treemap.nodes(dat);
 
-		var nodes = treemap_g.selectAll('.treemap-nodes')
-		.data(treemap_nodes, function(d){
+		// var node_map = d3.map(treemap_nodes, function(d){
+		// 	return d.id;
+		// });
+
+		var nodes = treemap_g.datum(dat).selectAll('.treemap-nodes')
+		.data(treemap.nodes, function(d){
 			return d.id;
 		});
 
@@ -62,18 +79,37 @@ function Treemap(){
 		var nodesExit = nodes.exit();
 		nodesExit.remove();
 
-		var nodesUpdate = treemap_g.selectAll('.treemap-nodes')
+		var nodesUpdate = treemap_g.selectAll('.treemap-nodes');
+
+
+		// nodesUpdate.each(function(d, i){
+		// 	var n = node_map.get(d.id);
+		// 	d.size = n.size;
+		// 	d.GradRate = n.GradRate;
+		// 	d.x = n.x;
+		// 	d.y = n.y;
+		// 	d.dx = n.dx;
+		// 	d.dy = n.dy;
+		// });
+		
+		nodesUpdate
+		.transition()
+		.duration(1500)
 		.attr('transform', function(d, i){
 			return 'translate(' + [d.x, d.y] + ')';
 		});
 
 		nodesUpdate.selectAll('rect')
+		.transition()
+		.duration(1500)
 		.attr('x', 0).attr('y', 0)
 		.attr('width', function(d){return d.dx;}).attr('height', function(d){return d.dy;})
 		.attr('stroke-width', 1).attr('stroke', 'black').attr('fill', function(d){
-			return color_scale(d.GradRate);
+			return color(d.GradRate);
 		});
 
+		nodesUpdate.on('mouseover', tip.show);
+		nodesUpdate.on('mouseout', tip.hide);
 		return this;
 	};
 
