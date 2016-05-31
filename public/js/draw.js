@@ -126,7 +126,10 @@ function inst_label(){
 			.attr('stroke', 'black')
 			.attr('stroke-width', 1.5);
 		}
-		scatterPlot.update();
+		if(scatterPlot)
+			scatterPlot.update();
+		if(treemap)
+			treemap.update();
 	});
 }
 
@@ -146,7 +149,10 @@ function inst_confs(confs){
 					selected_confs.push(Number(checkboxes[i].getAttribute("value")));
 			}
 			state.ConfSelections = d3.set(selected_confs);
-			scatterPlot.update();
+			if(scatterPlot)
+				scatterPlot.update();
+			if(treemap)
+				treemap.update();
 		});
 		dropdown.append(element).end();
 	}

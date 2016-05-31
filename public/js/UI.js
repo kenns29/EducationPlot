@@ -8,7 +8,10 @@ $('#filter-missing-data-checkbox').change(function(){
 	else{
 		opt.filter_missing_data = false;
 	}
-	scatterPlot.update();
+	if(scatterPlot)
+		scatterPlot.update();
+	if(treemap)
+		treemap.update();
 });
 
 $('#show-mean-std-checkbox').change(function(){
