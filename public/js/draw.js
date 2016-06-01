@@ -45,13 +45,18 @@ function init_search(data){
 	        if (token.value === event.attrs.value)
 	            event.preventDefault();
 	    });
+	    if(event.attrs.value == 0 && existingTokens.length > 0)
+	    	event.preventDefault();
 	});
 	tokenfield.on('tokenfield:removetoken', function(event) {
 		if(event.attrs.value == 0)
 			event.preventDefault();
 	});
 	tokenfield.on('tokenfield:removedtoken', function(event) {
-		scatterPlot.search();
+		if($(this).tokenfield('getTokens').length == 0)
+			scatterPlot.search("All");
+		else
+			scatterPlot.search();
 	});
 }
 

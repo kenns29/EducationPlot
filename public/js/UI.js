@@ -41,7 +41,7 @@ $('#multiple-select-checkbox').change(function(){
 	}
 	else{
 		opt.multiple_select = false;
-		scatterPlot.search("All");
+		scatterPlot.search();
 	}
 	if(scatterPlot)
 		scatterPlot.update();
