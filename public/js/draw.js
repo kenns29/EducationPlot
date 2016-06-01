@@ -1,6 +1,4 @@
 function draw(data, confs){
-	console.log(data);
-	console.log(confs);
 	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
 	treemap = new Treemap().data(data).init().update();
@@ -14,7 +12,6 @@ function preprocess(data){
 	data.forEach(function(d){
 		d["fade"] = false;
 	})
-	console.log(data);
 }
 /*
 * Institution type label
@@ -23,30 +20,39 @@ function preprocess(data){
 function init_search(data){
 
 	var institution = ["All"];
+	var tokenfield = $("#tokenfield");
 	data.forEach(function(d){
 		institution.push(d.InstName);
 	})
 	$("#institution").val("All");
 	var institutionList = $("#institution").autocomplete({
-		source:institution,
-		change:function(event, ui){			
-			if(this.value == ""){
-				scatterPlot.search("All");
-			}else{
-				scatterPlot.search(this.value);
-			}
-			
-		},		
+		source:institution,	
 		select:function(event, ui){			
 			if(ui.item == null){
 				scatterPlot.search("All");
 			}else{
 				scatterPlot.search(ui.item.value);
 			}
-			//institutionList.autocomplete('option','change').call(institutionList);
 		}
 	});
-	
+
+	tokenfield.tokenfield();
+	tokenfield.tokenfield('writeable');
+	tokenfield.tokenfield('setTokens', [{value : 0, label : "All"}]);
+	tokenfield.on('tokenfield:createtoken', function (event) {
+	    var existingTokens = $(this).tokenfield('getTokens');
+	    $.each(existingTokens, function(index, token) {
+	        if (token.value === event.attrs.value)
+	            event.preventDefault();
+	    });
+	});
+	tokenfield.on('tokenfield:removetoken', function(event) {
+		if(event.attrs.value == 0)
+			event.preventDefault();
+	});
+	tokenfield.on('tokenfield:removedtoken', function(event) {
+		scatterPlot.search();
+	});
 }
 
 function inst_label(){

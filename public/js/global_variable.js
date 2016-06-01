@@ -13,7 +13,8 @@ var state = {
 
 var opt = {
 	filter_missing_data : false,
-	show_mean_std : false
+	show_mean_std : false,
+	multiple_select : false
 };
 
 var color = ['#7fc97f','#beaed4','#fdc086'];

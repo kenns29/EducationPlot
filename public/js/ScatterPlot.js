@@ -400,54 +400,77 @@ function ScatterPlot(){
 	};
 
 	this.search = function(institution){
-		console.log(institution);
-		if(institution == "All"){
-			console.log("All");
-			data.forEach(function(d){
-				d.fade = false;
-			})
-			self.update();
+		if(institution == "All" || institution === undefined){
+			var d = new Object();
+			d.UnitID = 0;
+			d.InstName = "All";
+			d.fade = "clicked";
+			InstClick(d);
 		}else{
 			var d;
-			data.forEach(function(d){
-				if(d.InstName == institution){
-					d.fade = "clicked";
-				}else{
-					d.fade = true;
+			for(var key in data) {
+				if(data[key].InstName == institution) {
+					data[key].fade = false;
+					InstClick(data[key]);
+					break;
 				}
-			})
-			self.update();			
-		}	
+			}
+		}
 	};
 
 	function InstClick(d){
-		console.log(d);
-		//fade out other institut
-		var id = d.UnitID;
-		var fade = d.fade;
-		if(fade == false){
+		var tokenfield = $("#tokenfield");
+
+		if(opt.multiple_select) {
 			$("#institution").val(d.InstName);
-			data.forEach(function(dd){
-				if(dd.UnitID != id){
-					dd.fade = true;
-				}else{
-					dd.fade = "clicked";
+			tokenfield.tokenfield("createToken", {value : d.UnitID, label : d.InstName});
+			var insts = tokenfield.tokenfield('getTokens');
+			var IDs = d3.set();
+			insts.forEach(function(inst) {
+				IDs.add(inst.value);
+			});
+			if(IDs.has(0) && IDs.size() > 1) {
+				tokenfield.tokenfield("setTokens", []);
+				insts.forEach(function(inst) {
+					if(inst.value != 0)
+						tokenfield.tokenfield("createToken", {value : inst.value, label : inst.label});
+				});
+			}
+			data.forEach(function(inst) {
+				if(IDs.has(inst.UnitID)) {
+					inst.fade = false;
+				} else {
+					inst.fade = true;
 				}
-			})
-		}else if(fade == "clicked"){
-			$("#institution").val('All');
-			data.forEach(function(dd){
-				dd.fade = false;
-			})
-		}else if(fade == true){
-			$("#institution").val(d.InstName);
-			data.forEach(function(dd) {
-				if(dd.UnitID != id){
-					dd.fade = true;
-				}else{
-					dd.fade = "clicked";
-				}
-			})
+			});
+			d.fade = "clicked";
+		} else {
+			tokenfield.tokenfield("setTokens", []);
+			tokenfield.tokenfield("createToken", {value : d.UnitID, label : d.InstName});
+			if(fade == false){
+				$("#institution").val(d.InstName);
+				data.forEach(function(dd){
+					if(dd.UnitID != id){
+						dd.fade = true;
+					}else{
+						dd.fade = "clicked";
+					}
+				})
+			}else if(fade == "clicked"){
+				$("#institution").val('All');
+				data.forEach(function(dd){
+					dd.fade = false;
+				})
+			}else if(fade == true){
+				$("#institution").val(d.InstName);
+				data.forEach(function(dd) {
+					if(dd.UnitID != id){
+						dd.fade = true;
+					}else{
+						dd.fade = "clicked";
+					}
+				})
+			}
 		}
 		self.update();
 	}
