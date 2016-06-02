@@ -303,7 +303,7 @@ function ScatterPlot(){
 
 	this.showTrajectory = function(){
 		var clicked_d = data.filter(function(d){
-			return d.fade == 'clicked';
+			return d.fade == false;
 		})[0];
 		if(clicked_d){
 			console.log('clicked_d', clicked_d);
