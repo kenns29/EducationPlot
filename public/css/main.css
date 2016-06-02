@@ -172,5 +172,5 @@ input[type="radio"].styled:checked label:after,
 
 .tokenfield .token .token-label
 {
-  max-width: 300px !important;
+  max-width: 250px !important;
 }

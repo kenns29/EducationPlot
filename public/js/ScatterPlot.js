@@ -306,7 +306,6 @@ function ScatterPlot(){
 			return d.fade == false;
 		})[0];
 		if(clicked_d){
-			console.log('clicked_d', clicked_d);
 			mode = ScatterPlot.TREJECTORY;
 			svg.selectAll('.dot').remove();
 

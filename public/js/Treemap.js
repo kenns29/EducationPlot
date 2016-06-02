@@ -49,7 +49,7 @@ function Treemap(){
 		color_scales[0] = d3.scale.quantize().domain([0, 100]).range(['#edf8fb','#ccece6','#99d8c9','#66c2a4','#41ae76','#238b45','#005824']);
 		color_scales[1] = d3.scale.quantize().domain([0, 100]).range(['#f2f0f7','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#4a1486']);
 		color_scales[2] = d3.scale.quantize().domain([0, 100]).range(['#ffffd4','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#8c2d04']);
-		color_scales[3] = d3.scale.quantize().domain([0, 100]).range(['#ffffff','#dddddd','#bbbbbb','#999999','#777777','#555555','#333333']);
+		color_scales[3] = d3.scale.quantize().domain([0, 100]).range(['#dddddd','#b8b8b8','#aaaaaa','#888888','#777777','#585858','#444444']);
 
 		function color(d){
 			if(d.GradRate === 0){
@@ -125,10 +125,19 @@ function Treemap(){
 		// .duration(500)
 		.attr('x', 0).attr('y', 0)
 		.attr('width', function(d){return d.dx;}).attr('height', function(d){return d.dy;})
-		.attr('stroke-width', 1).attr('stroke', 'black').attr('fill', function(d){
+		.attr('stroke-width', 1).attr('stroke', function(d){
+			if(!d.children && !d.fade && color(d) == "white")
+				return color_deep[d.InstSector - 1];
+			else
+				return "black";
+		}).attr('fill', function(d){
 			if(!d.children)
 				return color(d);
 		});
+
+		nodesUpdate.filter(function(d){
+			return !d.fade && d.InstName != "root";
+		}).moveToFront();
 
 		nodesUpdate.on('mouseover', tip.show);
 		nodesUpdate.on('mouseout', tip.hide);
