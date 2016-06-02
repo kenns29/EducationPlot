@@ -41,22 +41,21 @@ function init_search(data){
 	tokenfield.tokenfield('setTokens', [{value : 0, label : "All"}]);
 	tokenfield.on('tokenfield:createtoken', function (event) {
 	    var existingTokens = $(this).tokenfield('getTokens');
-	    $.each(existingTokens, function(index, token) {
-	        if (token.value === event.attrs.value)
-	            event.preventDefault();
-	    });
-	    if(event.attrs.value == 0 && existingTokens.length > 0)
-	    	event.preventDefault();
+	    for(var key in existingTokens) {
+	    	if(existingTokens[key].value == event.attrs.value) {
+	    		event.preventDefault();
+	    		break;
+	    	}
+	    }
+	    // if(event.attrs.value == 0 && existingTokens.length > 0)
+	    // 	event.preventDefault();
 	});
 	tokenfield.on('tokenfield:removetoken', function(event) {
 		if(event.attrs.value == 0)
 			event.preventDefault();
 	});
 	tokenfield.on('tokenfield:removedtoken', function(event) {
-		if($(this).tokenfield('getTokens').length == 0)
-			scatterPlot.search("All");
-		else
-			scatterPlot.search();
+		scatterPlot.search();
 	});
 }
 

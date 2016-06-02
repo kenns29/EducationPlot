@@ -285,11 +285,15 @@ function ScatterPlot(){
 			return value >= 0 ? y(value) : y(0);
 		});
 		
+		dotUpdate.filter(function(d){
+			return !d.fade;
+		}).moveToFront();
+
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);
 		dotUpdate.on('click',function(d){
-			d3.select(this).moveToFront();
+			// d3.select(this).moveToFront();
 			tip.hide();
 			InstClick(d);
 			
@@ -404,12 +408,21 @@ function ScatterPlot(){
 			InstClick({
 				UnitID: 0,
 				InstName: "All",
-				fade: "clicked"
 			});
 		}else if(institution === undefined){
-			InstClick(undefined);
+			var tokenfield = $("#tokenfield");
+			var tokens = tokenfield.tokenfield("getTokens");
+			if(tokens.length == 0) {
+				this.search("All");
+				return;
+			} else if(tokens.length > 1 && !opt.multiple_select) {
+				tokenfield.tokenfield('setTokens', []);
+				this.search("All");
+				return;
+			} else {
+				InstClick(undefined);
+			}
 		}else{
-			var d;
 			for(var key in data) {
 				if(data[key].InstName == institution) {
 					data[key].fade = false;
@@ -422,70 +435,62 @@ function ScatterPlot(){
 
 	function InstClick(d){
 		var tokenfield = $("#tokenfield");
+		var tokens = [];
+		var instLabel = "";
 
-		if(opt.multiple_select) {
-			if(d !== undefined)
-				tokenfield.tokenfield("createToken", {value : d.UnitID, label : d.InstName});
-			var insts = tokenfield.tokenfield('getTokens');
-			var IDs = d3.set();
-			insts.forEach(function(inst) {
-				IDs.add(inst.value);
-			});
-			if(d !== undefined) {
-				$("#institution").val(d.InstName);
-				if(IDs.has(0) && IDs.size() > 1) {
-					tokenfield.tokenfield("setTokens", []);
-					insts.forEach(function(inst) {
-						if(inst.value != 0)
-							tokenfield.tokenfield("createToken", {value : inst.value, label : inst.label});
-					});
-				}
-				data.forEach(function(inst) {
-					if(d.UnitID == 0 || IDs.has(inst.UnitID)) {
-						inst.fade = false;
-					} else {
-						inst.fade = true;
-					}
-				});
-				d.fade = "clicked";
-			} else {
-				data.forEach(function(inst) {
-					if(IDs.has(inst.UnitID)) {
-						inst.fade = false;
-					} else {
-						inst.fade = true;
-					}
-				});
-			}
+		if(d === undefined) {
+			tokens = tokenfield.tokenfield("getTokens");
+			instLabel = tokens[0].label;
+		} else if(d.UnitID == 0) {
+			tokens.push({value : 0, label : "All"});
+			instLabel = "All";
 		} else {
-			tokenfield.tokenfield("setTokens", []);
+			instLabel = d.InstName;
 			tokenfield.tokenfield("createToken", {value : d.UnitID, label : d.InstName});
-			if(d.fade == false){
-				$("#institution").val(d.InstName);
-				data.forEach(function(dd){
-					if(dd.UnitID != d.UnitID){
-						dd.fade = true;
-					}else{
-						dd.fade = "clicked";
+			tokens = tokenfield.tokenfield("getTokens");
+			var allSelected = false;
+			if(tokens.length > 1) {
+				for(var key in tokens) {
+					if(tokens[key].value == 0) {
+						tokens.splice(key, 1);
+						allSelected = true;
+						break;
 					}
-				})
-			}else if(d.fade == "clicked"){
-				$("#institution").val('All');
-				tokenfield.tokenfield("setTokens", [{value : 0, label : "All"}]);
-				data.forEach(function(dd){
-					dd.fade = false;
-				})
-			}else if(d.fade == true){
-				$("#institution").val(d.InstName);
-				data.forEach(function(dd) {
-					if(dd.UnitID != d.UnitID){
-						dd.fade = true;
-					}else{
-						dd.fade = "clicked";
+				}
+			}
+			if(!opt.multiple_select) {
+				tokenfield.tokenfield("setTokens", [{value : d.UnitID, label : d.InstName}]);
+				tokens = tokenfield.tokenfield("getTokens");
+			}
+			if(!d.fade && !allSelected) {
+				instLabel = tokens[0].label;
+				for(var key in tokens) {
+					if(tokens[key].value == d.UnitID) {
+						tokens.splice(key, 1);
+						break;
 					}
-				})
+				}
 			}
 		}
+
+		if(tokens.length == 0) {
+			tokenfield.tokenfield("setTokens", []);
+			self.search("All");
+			return;
+		}
+		var IDs = d3.set();
+		tokens.forEach(function(inst) {
+			IDs.add(inst.value);
+		});
+		data.forEach(function(inst) {
+			if(IDs.has(0) || IDs.has(inst.UnitID)) {
+				inst.fade = false;
+			} else {
+				inst.fade = true;
+			}
+		});
+		tokenfield.tokenfield("setTokens", tokens);
+		$("#institution").val(instLabel);
 		self.update();
 	}
 
