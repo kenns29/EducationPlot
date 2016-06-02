@@ -183,6 +183,49 @@ function ScatterPlot(){
 		//current dots
 		var dotUpdate = svg.selectAll('.dot');
 
+
+
+		dotUpdate
+		.style("opacity", function(d) {
+			if(d.fade == true){
+				return 0.4;
+			}else return 1;
+		})
+		.style("fill", function(d){
+			return d.fade == true ? "gray" : color[d.InstSector - 1];
+		});
+
+		dotUpdate
+		.transition()
+		.duration(500)
+		.attr("r", function(d){
+			var value =  Math.max(0, d["NumStudents"][state.year]);
+			return Math.ceil(Math.log(Math.max(2, value/10)));
+		})
+		.attr("cx", function(d){
+			var value = d["Pell"][state.year];
+			return value >= 0 ? x(value) : x(0);
+		})
+		.attr("cy", function(d){
+			var value = d["GradRate"][state.year];
+			return value >= 0 ? y(value) : y(0);
+		});
+		
+		dotUpdate.filter(function(d){
+			return !d.fade;
+		}).moveToFront();
+
+		//mouse over events
+		dotUpdate.on('mouseover', tip.show);
+		dotUpdate.on('mouseout', tip.hide);
+		dotUpdate.on('click',function(d, i){
+			// d3.select(this).moveToFront();
+			tip.hide(d, i);
+			self.InstClick(d);
+			
+		});
+
+
 		//draw mean and std
 		if(opt.show_mean_std == true){
 			d3.selectAll(".meanstd_pell").remove();
@@ -259,46 +302,6 @@ function ScatterPlot(){
 			d3.selectAll(".meanstd_pell").remove();
 			d3.selectAll(".meanstd_gradrate").remove();
 		}
-
-		dotUpdate
-		.style("opacity", function(d) {
-			if(d.fade == true){
-				return 0.4;
-			}else return 1;
-		})
-		.style("fill", function(d){
-			return d.fade == true ? "gray" : color[d.InstSector - 1];
-		});
-
-		dotUpdate
-		.transition()
-		.duration(500)
-		.attr("r", function(d){
-			var value =  Math.max(0, d["NumStudents"][state.year]);
-			return Math.ceil(Math.log(Math.max(2, value/10)));
-		})
-		.attr("cx", function(d){
-			var value = d["Pell"][state.year];
-			return value >= 0 ? x(value) : x(0);
-		})
-		.attr("cy", function(d){
-			var value = d["GradRate"][state.year];
-			return value >= 0 ? y(value) : y(0);
-		});
-		
-		dotUpdate.filter(function(d){
-			return !d.fade;
-		}).moveToFront();
-
-		//mouse over events
-		dotUpdate.on('mouseover', tip.show);
-		dotUpdate.on('mouseout', tip.hide);
-		dotUpdate.on('click',function(d, i){
-			// d3.select(this).moveToFront();
-			tip.hide(d, i);
-			self.InstClick(d);
-			
-		});
 		return this;
 	};
 
