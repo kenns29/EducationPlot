@@ -40,9 +40,30 @@
 
 #container #container_up #control #data-control{
 	width:100%;
-	height: 70px;
+	height: 120px;
+	margin:auto;
+}
+#container #container_up #control #data-control #conference-selection-control{
+	width : 200px;
+	height:30px;
+	float:right;
+}
+#container #container_up #control #data-control #show-filter-missing-data-div{
+	width : 170px;
+	height:20px;
+	float:right;
+}
+#container #container_up #control #data-control #show-mean-std-checkbox-div{
+	width : 170px;
+	height:20px;
+	float:right;
 }
 
+#container #container_up #control #schoold-selection-autocomplete-div{
+	width : 300px;
+	height:30px;
+	float:right;
+}
 #container #container_up #control #trajectory-control{
 	width: 100%;
 	height: 20%;

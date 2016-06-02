@@ -157,7 +157,7 @@ function inst_confs(confs){
 			return 0;
 	});
 	for(var key in confs) {
-		var element = $('<label style="display:block;"><input type="checkbox"/>' + confs[key].Name + '</label>');
+		var element = $('<label style="display:block;width:200px;"><input type="checkbox"/>' + confs[key].Name + '</label>');
 		element.attr("value", confs[key].Code);
 		element.click(function() {
 			var checkboxes = $("#conference-dropdown")[0].childNodes;
