@@ -314,6 +314,16 @@ function ScatterPlot(){
 			alert('Please select schools to show the yearly trajectory.');
 			return;
 		}
+
+		//define the tooltip
+		var tip = d3.tip()
+		.attr('class', 'd3-tip')
+		.offset([-10, 0])
+		.html(function(d) {
+			return "<span style='color:white'>" + d.InstName + "</span>";
+		});
+		svg.call(tip);
+
 		if(clicked_ds){
 			clicked_ds.forEach(function(clicked_d){
 				mode = ScatterPlot.TRAJECTORY;
@@ -331,6 +341,7 @@ function ScatterPlot(){
 						'InstSector' : clicked_d.InstSector,
 						'index' : index++,
 						'UnitID' : clicked_d.UnitID,
+						'InstName' : clicked_d.InstName
 					});
 				}
 
@@ -402,7 +413,9 @@ function ScatterPlot(){
 				.attr('stroke', 'black')
 				.attr('stroke-width', function(d) {
 					return d.year === state.year ? 2 : 1;
-				});
+				})
+				.on('mouseover', tip.show)
+				.on('mouseout', tip.hide);
 			});
 		}
 		mode = ScatterPlot.TRAJECTORY;
