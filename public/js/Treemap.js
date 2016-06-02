@@ -141,8 +141,8 @@ function Treemap(){
 
 		nodesUpdate.on('mouseover', tip.show);
 		nodesUpdate.on('mouseout', tip.hide);
-		nodesUpdate.on('click', function(d) {
-			tip.hide();
+		nodesUpdate.on('click', function(d, i) {
+			tip.hide(d, i);
 			// TODO: There is a better place to put updates, outside of scatterplot and treemap specific files
 			scatterPlot.InstClick(d);
 		});

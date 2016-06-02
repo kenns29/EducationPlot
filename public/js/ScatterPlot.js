@@ -292,9 +292,9 @@ function ScatterPlot(){
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);
-		dotUpdate.on('click',function(d){
+		dotUpdate.on('click',function(d, i){
 			// d3.select(this).moveToFront();
-			tip.hide();
+			tip.hide(d, i);
 			self.InstClick(d);
 			
 		});
