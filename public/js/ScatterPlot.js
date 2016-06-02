@@ -147,7 +147,7 @@ function ScatterPlot(){
 
 	this.update = function(){
 		mode = ScatterPlot.SCATTER;
-		this.removeTrajectory();
+		// this.removeTrajectory();
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
 		//define the tooltip
 		var tip = d3.tip()
@@ -322,7 +322,8 @@ function ScatterPlot(){
 						'year' : i,
 						'InstSector' : clicked_d.InstSector,
 						'index' : index++,
-						'UnitID' : clicked_d.UnitID
+						'UnitID' : clicked_d.UnitID,
+						'highlight' : i == state.year
 					});
 				}
 
@@ -392,7 +393,9 @@ function ScatterPlot(){
 					return d.fade == true ? "gray" : color[d.InstSector - 1];
 				})
 				.attr('stroke', 'black')
-				.attr('stroke-width', 1);
+				.attr('stroke-width', function(d) {
+					return d.highlight ? 2 : 1;
+				});
 			});
 		}
 		return this;
