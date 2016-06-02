@@ -295,7 +295,7 @@ function ScatterPlot(){
 		dotUpdate.on('click',function(d){
 			// d3.select(this).moveToFront();
 			tip.hide();
-			InstClick(d);
+			self.InstClick(d);
 			
 		});
 		return this;
@@ -405,7 +405,7 @@ function ScatterPlot(){
 
 	this.search = function(institution){
 		if(institution == "All"){
-			InstClick({
+			this.InstClick({
 				UnitID: 0,
 				InstName: "All",
 			});
@@ -420,20 +420,20 @@ function ScatterPlot(){
 				this.search("All");
 				return;
 			} else {
-				InstClick(undefined);
+				this.InstClick(undefined);
 			}
 		}else{
 			for(var key in data) {
 				if(data[key].InstName == institution) {
 					data[key].fade = false;
-					InstClick(data[key]);
+					this.InstClick(data[key]);
 					break;
 				}
 			}
 		}
 	};
 
-	function InstClick(d){
+	this.InstClick = function(d){
 		var tokenfield = $("#tokenfield");
 		var tokens = [];
 		var instLabel = "";
@@ -492,6 +492,8 @@ function ScatterPlot(){
 		tokenfield.tokenfield("setTokens", tokens);
 		$("#institution").val(instLabel);
 		self.update();
+		// TODO: Use solution that isn't so taxing!
+		treemap.update();
 	}
 
 	/*

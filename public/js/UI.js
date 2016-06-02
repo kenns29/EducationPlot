@@ -45,8 +45,4 @@ $('#multiple-select-checkbox').change(function(){
 		opt.multiple_select = false;
 		scatterPlot.search();
 	}
-	if(scatterPlot)
-		scatterPlot.update();
-	if(treemap)
-		treemap.update();
 });
