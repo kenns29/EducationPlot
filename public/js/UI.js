@@ -34,3 +34,17 @@ $('#show-trajectory-button').click(function(){
 		scatterPlot.update();
 	}
 });
+
+$('#multiple-select-checkbox').change(function(){
+	if($(this).is(':checked')){
+		opt.multiple_select = true;
+	}
+	else{
+		opt.multiple_select = false;
+		scatterPlot.search();
+	}
+	if(scatterPlot)
+		scatterPlot.update();
+	if(treemap)
+		treemap.update();
+});

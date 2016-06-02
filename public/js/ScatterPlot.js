@@ -285,11 +285,15 @@ function ScatterPlot(){
 			return value >= 0 ? y(value) : y(0);
 		});
 		
+		dotUpdate.filter(function(d){
+			return !d.fade;
+		}).moveToFront();
+
 		//mouse over events
 		dotUpdate.on('mouseover', tip.show);
 		dotUpdate.on('mouseout', tip.hide);
 		dotUpdate.on('click',function(d){
-			d3.select(this).moveToFront();
+			// d3.select(this).moveToFront();
 			tip.hide();
 			InstClick(d);
 			
@@ -299,7 +303,7 @@ function ScatterPlot(){
 
 	this.showTrajectory = function(){
 		var clicked_d = data.filter(function(d){
-			return d.fade == 'clicked';
+			return d.fade == false;
 		})[0];
 		if(clicked_d){
 			console.log('clicked_d', clicked_d);
@@ -400,55 +404,93 @@ function ScatterPlot(){
 	};
 
 	this.search = function(institution){
-		console.log(institution);
 		if(institution == "All"){
-			console.log("All");
-			data.forEach(function(d){
-				d.fade = false;
-			})
-			self.update();
+			InstClick({
+				UnitID: 0,
+				InstName: "All",
+			});
+		}else if(institution === undefined){
+			var tokenfield = $("#tokenfield");
+			var tokens = tokenfield.tokenfield("getTokens");
+			if(tokens.length == 0) {
+				this.search("All");
+				return;
+			} else if(tokens.length > 1 && !opt.multiple_select) {
+				tokenfield.tokenfield('setTokens', []);
+				this.search("All");
+				return;
+			} else {
+				InstClick(undefined);
+			}
 		}else{
-			var d;
-			data.forEach(function(d){
-				if(d.InstName == institution){
-					d.fade = "clicked";
-				}else{
-					d.fade = true;
+			for(var key in data) {
+				if(data[key].InstName == institution) {
+					data[key].fade = false;
+					InstClick(data[key]);
+					break;
 				}
-			})
-			self.update();			
-		}	
+			}
+		}
 	};
 
 	function InstClick(d){
-		console.log(d);
-		//fade out other institut
-		var id = d.UnitID;
-		var fade = d.fade;
-		if(fade == false){
-			$("#institution").val(d.InstName);
-			data.forEach(function(dd){
-				if(dd.UnitID != id){
-					dd.fade = true;
-				}else{
-					dd.fade = "clicked";
+		var tokenfield = $("#tokenfield");
+		var tokens = [];
+		var instLabel = "";
+
+		if(d === undefined) {
+			tokens = tokenfield.tokenfield("getTokens");
+			instLabel = tokens[0].label;
+		} else if(d.UnitID == 0) {
+			tokens.push({value : 0, label : "All"});
+			instLabel = "All";
+		} else {
+			instLabel = d.InstName;
+			tokenfield.tokenfield("createToken", {value : d.UnitID, label : d.InstName});
+			tokens = tokenfield.tokenfield("getTokens");
+			var allSelected = false;
+			if(tokens.length > 1) {
+				for(var key in tokens) {
+					if(tokens[key].value == 0) {
+						tokens.splice(key, 1);
+						allSelected = true;
+						break;
+					}
 				}
-			})
-		}else if(fade == "clicked"){
-			$("#institution").val('All');
-			data.forEach(function(dd){
-				dd.fade = false;
-			})
-		}else if(fade == true){
-			$("#institution").val(d.InstName);
-			data.forEach(function(dd) {
-				if(dd.UnitID != id){
-					dd.fade = true;
-				}else{
-					dd.fade = "clicked";
+			}
+			if(!opt.multiple_select) {
+				tokenfield.tokenfield("setTokens", [{value : d.UnitID, label : d.InstName}]);
+				tokens = tokenfield.tokenfield("getTokens");
+			}
+			if(!d.fade && !allSelected) {
+				instLabel = tokens[0].label;
+				for(var key in tokens) {
+					if(tokens[key].value == d.UnitID) {
+						tokens.splice(key, 1);
+						break;
+					}
 				}
-			})
+			}
 		}
+
+		if(tokens.length == 0) {
+			tokenfield.tokenfield("setTokens", []);
+			self.search("All");
+			return;
+		}
+		var IDs = d3.set();
+		tokens.forEach(function(inst) {
+			IDs.add(inst.value);
+		});
+		data.forEach(function(inst) {
+			if(IDs.has(0) || IDs.has(inst.UnitID)) {
+				inst.fade = false;
+			} else {
+				inst.fade = true;
+			}
+		});
+		tokenfield.tokenfield("setTokens", tokens);
+		$("#institution").val(instLabel);
 		self.update();
 	}
 
