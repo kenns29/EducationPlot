@@ -97,7 +97,7 @@
 }
 #container #container_up #legend #dot-legend-container{
 	width : 100%;
-	height: 50%;
+	height : 30%;
 }
 #container #container_bottom #slider-title{
 	width: 50%;
@@ -168,4 +168,9 @@ input[type="radio"].styled:checked label:after,
 
 .token-input {
 	display: none;
+}
+
+.tokenfield .token .token-label
+{
+  max-width: 300px !important;
 }

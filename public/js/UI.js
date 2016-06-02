@@ -37,9 +37,11 @@ $('#show-trajectory-button').click(function(){
 
 $('#multiple-select-checkbox').change(function(){
 	if($(this).is(':checked')){
+		$('#tokenfield-div').show();
 		opt.multiple_select = true;
 	}
 	else{
+		$('#tokenfield-div').hide();
 		opt.multiple_select = false;
 		scatterPlot.search();
 	}
