@@ -26,11 +26,12 @@ $('#show-mean-std-checkbox').change(function(){
 $('#show-trajectory-button').click(function(){
 	if(!$(this).hasClass('active')){
 		scatterPlot.showTrajectory();
-		if(scatterPlot.mode() == ScatterPlot.TREJECTORY)
+		if(scatterPlot.mode() === ScatterPlot.TRAJECTORY)
 			$(this).addClass('active');
 	}
 	else{
 		$(this).removeClass('active');
+		scatterPlot.removeTrajectory();
 		scatterPlot.update();
 	}
 });

@@ -191,7 +191,10 @@ function slider(data){
 		step: 1,
 		slide: function(event, ui){
 			state.year = ui.value;
-			scatterPlot.update();
+			if(scatterPlot.mode() === ScatterPlot.SCATTER)
+				scatterPlot.update();
+			else
+				scatterPlot.updateTrajectory();
 			treemap.update();
 		}
 	});

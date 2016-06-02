@@ -8,6 +8,7 @@ function ScatterPlot(){
 	var svg;
 	var xAxis, yAxis, x, y;
 	var mode = ScatterPlot.SCATTER;
+
 	this.init = function(){
 		//title
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
@@ -305,10 +306,14 @@ function ScatterPlot(){
 		var clicked_ds = data.filter(function(d){
 			return d.fade == false;
 		});
-	
+		
+		if(clicked_ds.length == data.length){
+			alert('Please select schools to show the yearly trajectory.');
+			return;
+		}
 		if(clicked_ds){
 			clicked_ds.forEach(function(clicked_d){
-				mode = ScatterPlot.TREJECTORY;
+				mode = ScatterPlot.TRAJECTORY;
 				svg.selectAll('.dot').remove();
 
 				//make dots and links
@@ -323,7 +328,6 @@ function ScatterPlot(){
 						'InstSector' : clicked_d.InstSector,
 						'index' : index++,
 						'UnitID' : clicked_d.UnitID,
-						'highlight' : i == state.year
 					});
 				}
 
@@ -378,9 +382,9 @@ function ScatterPlot(){
 				.attr('stroke-width', 1)
 				.attr('fill', 'none');
 
-				svg.selectAll('.trajectory.t-dot' + clicked_d.UnitID).data(dat)
+				svg.selectAll('.trajectory.t-dot.inst-' + clicked_d.UnitID).data(dat)
 				.enter().append('circle')
-				.attr('class', 'trajectory t-dot' + clicked_d.UnitID)
+				.attr('class', 'trajectory t-dot inst-' + clicked_d.UnitID)
 				.attr('cx', function(d){
 					return d.x;
 				}).attr('cy', function(d){
@@ -394,17 +398,26 @@ function ScatterPlot(){
 				})
 				.attr('stroke', 'black')
 				.attr('stroke-width', function(d) {
-					return d.highlight ? 2 : 1;
+					return d.year === state.year ? 2 : 1;
 				});
 			});
 		}
+		mode = ScatterPlot.TRAJECTORY;
 		return this;
+	};
+
+	this.updateTrajectory = function(){
+		svg.selectAll('.trajectory.t-dot')
+		.attr('stroke-width', function(d){
+			return d.year === state.year ? 2 : 1;
+		});
 	};
 
 	this.removeTrajectory = function(){
 		// svg.selectAll('.t-dot').remove();
 		// svg.selectAll('.t-link').remove();
 		svg.selectAll('.trajectory').remove();
+		mode = ScatterPlot.SCATTER;
 		// svg.selectAll('defs').remove();
 		$('#show-trajectory-button').removeClass('active');
 		return this;
@@ -515,10 +528,11 @@ function ScatterPlot(){
 	this.title_container = function(_){
 		return (arguments.length > 0) ? (title_container = _, this) : title_container;
 	};
+
 	this.mode = function(_){
 		return mode;
 	};
 }
 
 ScatterPlot.SCATTER = 'scatter';
-ScatterPlot.TREJECTORY = 'trejectory';
+ScatterPlot.TRAJECTORY = 'trajectory';
