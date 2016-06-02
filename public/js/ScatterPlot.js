@@ -295,109 +295,113 @@ function ScatterPlot(){
 		dotUpdate.on('click',function(d){
 			// d3.select(this).moveToFront();
 			tip.hide();
-			InstClick(d);
+			self.InstClick(d);
 			
 		});
 		return this;
 	};
 
 	this.showTrajectory = function(){
-		var clicked_d = data.filter(function(d){
+		var clicked_ds = data.filter(function(d){
 			return d.fade == false;
-		})[0];
-		if(clicked_d){
-			console.log('clicked_d', clicked_d);
-			mode = ScatterPlot.TREJECTORY;
-			svg.selectAll('.dot').remove();
+		});
+	
+		if(clicked_ds){
+			clicked_ds.forEach(function(clicked_d){
+				mode = ScatterPlot.TREJECTORY;
+				svg.selectAll('.dot').remove();
 
-			//make dots and links
-			var dat = [];
-			var index = 0;
-			for(var i = 2008; i <= 2014; i++){
-				dat.push({
-					'x' : x(clicked_d.Pell[i.toString()]),
-					'y' : y(clicked_d.GradRate[i.toString()]),
-					'r' : Math.ceil(Math.log(Math.max(2, Math.max(0, clicked_d.NumStudents[i.toString()])/10))),
-					'year' : i,
-					'InstSector' : clicked_d.InstSector,
-					'index' : index++
-				});
-			}
+				//make dots and links
+				var dat = [];
+				var index = 0;
+				for(var i = 2008; i <= 2014; i++){
+					dat.push({
+						'x' : x(clicked_d.Pell[i.toString()]),
+						'y' : y(clicked_d.GradRate[i.toString()]),
+						'r' : Math.ceil(Math.log(Math.max(2, Math.max(0, clicked_d.NumStudents[i.toString()])/10))),
+						'year' : i,
+						'InstSector' : clicked_d.InstSector,
+						'index' : index++,
+						'UnitID' : clicked_d.UnitID
+					});
+				}
 
-			var link = [];
-			for(var i = 0; i < dat.length - 1; i++){
-				link.push({
-					'source' : dat[i],
-					'target' : dat[i+1]
-				});
-			}
+				var link = [];
+				for(var i = 0; i < dat.length - 1; i++){
+					link.push({
+						'source' : dat[i],
+						'target' : dat[i+1]
+					});
+				}
 
-			//draw dots and links
-			var diagonal = d3.svg.diagonal().source(function(d){return {x : d.source.x, y:d.source.y};})
-			.target(function(d){return {x : d.target.x, y:d.target.y};})
-			.projection(function(d){return [d.x, d.y];});
+				//draw dots and links
+				var diagonal = d3.svg.diagonal().source(function(d){return {x : d.source.x, y:d.source.y};})
+				.target(function(d){return {x : d.target.x, y:d.target.y};})
+				.projection(function(d){return [d.x, d.y];});
 
-			/*
-			* Define the arrow
-			*/
-			// svg.append('defs')
-			// .append('marker')
-			// .attr('id', 'arrow-marker')
-			// .attr('markerWidth', 10)
-			// .attr('markerHeight', 10)
-			// .attr('refX', 0)
-			// .attr('refY', 3)
-			// .attr('markerUnits', 'strokeWidth')
-			// .attr('orient', 'auto')
-			// .append('path')
-			// .attr('d', 'M0,0 L0,6 L9,3 z')
-			// .attr('fill', 'black');
-			
-			// svg.selectAll('.t-link').data(link).enter().append('path')
-			// .attr('class', 't-link')
-			// .attr('d', diagonal)
-			// .attr('stroke', 'black')
-			// .attr('stroke-width', 1)
-			// .attr('fill', 'none');
+				/*
+				* Define the arrow
+				*/
+				// svg.append('defs')
+				// .append('marker')
+				// .attr('id', 'arrow-marker')
+				// .attr('markerWidth', 10)
+				// .attr('markerHeight', 10)
+				// .attr('refX', 0)
+				// .attr('refY', 3)
+				// .attr('markerUnits', 'strokeWidth')
+				// .attr('orient', 'auto')
+				// .append('path')
+				// .attr('d', 'M0,0 L0,6 L9,3 z')
+				// .attr('fill', 'black');
+				
+				// svg.selectAll('.t-link').data(link).enter().append('path')
+				// .attr('class', 't-link')
+				// .attr('d', diagonal)
+				// .attr('stroke', 'black')
+				// .attr('stroke-width', 1)
+				// .attr('fill', 'none');
 
-			// .attr('marker-end', function(d, i){
-			// 	if(i == link.length - 1){
-			// 		return 'url(#arrow-marker)';
-			// 	}
-			// 	return null;
-			// });
+				// .attr('marker-end', function(d, i){
+				// 	if(i == link.length - 1){
+				// 		return 'url(#arrow-marker)';
+				// 	}
+				// 	return null;
+				// });
 
-			var line = d3.svg.line().x(function(d){return d.x;}).y(function(d){return d.y;}).interpolate('cardinal')
-			svg.append('path')
-			.attr('class', 't-link')
-			.attr('d', line(dat))
-			.attr('stroke', 'black')
-			.attr('stroke-width', 1)
-			.attr('fill', 'none');
+				var line = d3.svg.line().x(function(d){return d.x;}).y(function(d){return d.y;}).interpolate('cardinal')
+				svg.append('path')
+				.attr('class', 'trajectory t-link')
+				.attr('d', line(dat))
+				.attr('stroke', 'black')
+				.attr('stroke-width', 1)
+				.attr('fill', 'none');
 
-			svg.selectAll('.t-dot').data(dat)
-			.enter().append('circle')
-			.attr('class', 't-dot')
-			.attr('cx', function(d){
-				return d.x;
-			}).attr('cy', function(d){
-				return d.y;
-			})
-			.attr('r', function(d){
-				return d.r;
-			})
-			.style("fill", function(d){
-				return d.fade == true ? "gray" : color[d.InstSector - 1];
-			})
-			.attr('stroke', 'black')
-			.attr('stroke-width', 1);
+				svg.selectAll('.trajectory.t-dot' + clicked_d.UnitID).data(dat)
+				.enter().append('circle')
+				.attr('class', 'trajectory t-dot' + clicked_d.UnitID)
+				.attr('cx', function(d){
+					return d.x;
+				}).attr('cy', function(d){
+					return d.y;
+				})
+				.attr('r', function(d){
+					return d.r;
+				})
+				.style("fill", function(d){
+					return d.fade == true ? "gray" : color[d.InstSector - 1];
+				})
+				.attr('stroke', 'black')
+				.attr('stroke-width', 1);
+			});
 		}
 		return this;
 	};
 
 	this.removeTrajectory = function(){
-		svg.selectAll('.t-dot').remove();
-		svg.selectAll('.t-link').remove();
+		// svg.selectAll('.t-dot').remove();
+		// svg.selectAll('.t-link').remove();
+		svg.selectAll('.trajectory').remove();
 		// svg.selectAll('defs').remove();
 		$('#show-trajectory-button').removeClass('active');
 		return this;
@@ -405,7 +409,7 @@ function ScatterPlot(){
 
 	this.search = function(institution){
 		if(institution == "All"){
-			InstClick({
+			this.InstClick({
 				UnitID: 0,
 				InstName: "All",
 			});
@@ -420,20 +424,20 @@ function ScatterPlot(){
 				this.search("All");
 				return;
 			} else {
-				InstClick(undefined);
+				this.InstClick(undefined);
 			}
 		}else{
 			for(var key in data) {
 				if(data[key].InstName == institution) {
 					data[key].fade = false;
-					InstClick(data[key]);
+					this.InstClick(data[key]);
 					break;
 				}
 			}
 		}
 	};
 
-	function InstClick(d){
+	this.InstClick = function(d){
 		var tokenfield = $("#tokenfield");
 		var tokens = [];
 		var instLabel = "";
@@ -492,6 +496,8 @@ function ScatterPlot(){
 		tokenfield.tokenfield("setTokens", tokens);
 		$("#institution").val(instLabel);
 		self.update();
+		// TODO: Use solution that isn't so taxing!
+		treemap.update();
 	}
 
 	/*
