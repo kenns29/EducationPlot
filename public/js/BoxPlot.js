@@ -33,13 +33,14 @@ function BoxPlot() {
 		stripped_data[1].sector = "private-not-for-profit";
 		stripped_data[2].sector = "private-for-profit";
 		data.forEach(function(d) {
-			var pell = d.Pell[state.year];
-			if(pell != -1) {
-				stripped_data[d.InstSector - 1].push(pell);
-				if (pell > max) max = pell;
-				if (pell < min) min = pell;
+			var rate = (opt.box_plot_pell ? d.Pell : d.GradRate)[state.year];
+			if(rate != -1) {
+				stripped_data[d.InstSector - 1].push(rate);
+				if (rate > max) max = rate;
+				if (rate < min) min = rate;
 			}
 		});
+		console.log(svg);
 		svg = d3.select(container).selectAll("svg")
 		      .data(stripped_data)
 		    .enter().append("svg")
@@ -51,6 +52,7 @@ function BoxPlot() {
 		    .append("g")
 		      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 		      .call(chart);
+		return this;
 	};
 
 	function iqr(k) {

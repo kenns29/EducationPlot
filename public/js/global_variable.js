@@ -14,7 +14,8 @@ var state = {
 var opt = {
 	filter_missing_data : false,
 	show_mean_std : false,
-	multiple_select : false
+	multiple_select : false,
+	box_plot_pell : true
 };
 
 var color = ['#7fc97f','#beaed4','#fdc086'];

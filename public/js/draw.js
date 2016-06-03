@@ -197,6 +197,7 @@ function slider(data){
 			else
 				scatterPlot.updateTrajectory();
 			treemap.update();
+			boxPlot.update();
 		}
 	});
 

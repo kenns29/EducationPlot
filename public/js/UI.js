@@ -48,3 +48,19 @@ $('#multiple-select-checkbox').change(function(){
 		scatterPlot.removeTrajectory();
 	}
 });
+
+$('#box-pell').click(function(){
+	if(!$(this).hasClass('active')){
+		$(this).addClass('active');
+		$('#box-grad').removeClass('active');
+		boxPlot.update();
+	}
+});
+
+$('#box-grad').click(function(){
+	if(!$(this).hasClass('active')){
+		$(this).addClass('active');
+		$('#box-pell').removeClass('active');
+		boxPlot.update();
+	}
+});
