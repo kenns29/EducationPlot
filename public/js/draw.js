@@ -74,7 +74,7 @@ function inst_label(){
 	
 
 	var svg = d3.select('#school-type-selection-control').append('svg')
-	.attr('width', width).attr('height', height);
+	.attr('width', '100%').attr('height', '100%');
 
 	var g = svg.append('g')
 	.attr('transform', function(){

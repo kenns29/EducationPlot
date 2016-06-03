@@ -5,7 +5,7 @@ function ScatterPlot(){
 	var legend_container = '#dot-legend-container';
 	var data;
 	var W, H, margin, width, height;
-	var svg;
+	var svg, legend_svg;
 	var xAxis, yAxis, x, y;
 	var mode = ScatterPlot.SCATTER;
 
@@ -21,8 +21,10 @@ function ScatterPlot(){
 		height = H - margin.top - margin.bottom;
 
 		svg = d3.select(graph_container).append("svg")
-		.attr("width", W)
-		.attr("height", H)
+		.attr("width", '100%')
+		.attr("height", '100%')
+		.attr('viewport', '0 0 100% 100%')
+		.attr('preserveAspectRatio', 'xMinYMin slice')
 		.append("g")
 		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
@@ -61,88 +63,7 @@ function ScatterPlot(){
 		.text("Grad Rate (%)");
 
 		//init the dot legend
-		(function(){
-			var legend_width = $(legend_container).width();
-			var legend_height = $(legend_container).height();
-			var legend_margin = {top:100, bottom:20, left:10, right:10};
-			var legend_svg = d3.select(legend_container).append('svg')
-			.attr('width', legend_width).attr('height', legend_height);
-
-			var dot_min = Infinity, dot_max = -Infinity;
-			for(var i = 0; i < data.length; i++){
-				for(var j in data[i].NumStudents){
-					if(data[i].NumStudents[j] < dot_min){
-						dot_min = data[i].NumStudents[j];
-					} 
-					if(data[i].NumStudents[j] > dot_max){
-						dot_max = data[i].NumStudents[j];
-					}
-				}
-			}
-			if(dot_min < 40) dot_min  = 40;
-			var r_max = Math.ceil(Math.log(dot_max/10));
-			var r_min = Math.ceil(Math.log(dot_min/10));
-
-			var r_range = [];
-			var cum = 0;
-			for(var i = r_min; i < r_max; i+=3){
-				var v = Math.ceil(Math.exp(i) * 10);
-				var n = v.toString().length - 1;
-				v = d3.round(v, -n);
-				var r = Math.log(v/10);
-				r_range.push({
-					'r' : r,
-					'cum' : cum 
-				});
-				cum += r*2;
-			}
-
-			if(r_max - r_range[r_range.length-1].r > 0){
-				r_range.push({
-					r : r_max,
-					cum : cum
-				});
-			}
-			var numDots = 5;
-			var interval = (dot_max - dot_min) / numDots;
-
-			var legend_g = legend_svg.append('g')
-			.attr('transform', 'translate(' + [legend_margin.left, legend_margin.top] + ')');
-
-			var dot_enter = legend_g.selectAll('.dot-legend')
-			.data(r_range)
-			.enter()
-			.append('g').attr('class', '.dot-legend')
-			.attr('transform', function(d, i){
-				return 'translate(' + [r_max, d.cum + d.r + 20*i] + ')';
-			});
-			
-			dot_enter.append('circle')
-			.attr('cx', 0)
-			.attr('cy', 0)
-			.attr('r', function(d){
-				return d.r;
-			})
-			.attr('fill', function(d){
-				return 'gray';
-			})
-			.attr('stroke', 'black').attr('stroke-width', 1);
-
-			dot_enter.append('text')
-			.attr('text-anchor', 'start')
-			.attr('dominant-baseline', 'middle')
-			.attr('x', r_max*2 + 5)
-			.attr('y', 2)
-			.text(function(d, i){
-				if(i == r_range.length - 1){
-					return Math.round(dot_max);
-				}
-				else {
-					var value = Math.exp(d.r) * 10;
-					return Math.round(value);
-				}
-			});
-		})();
+		this.showLegend();
 		return this;
 	};
 
@@ -532,6 +453,96 @@ function ScatterPlot(){
 		treemap.update();
 	}
 
+	this.showLegend = function(){
+		var legend_width = $(legend_container).width();
+		var legend_height = $(legend_container).height();
+		var legend_margin = {top:100, bottom:20, left:10, right:10};
+		if(legend_svg){
+			legend_svg.remove();
+		}
+		legend_svg = d3.select(legend_container).append('svg')
+		.attr('width', legend_width).attr('height', legend_height);
+
+		var dot_min = Infinity, dot_max = -Infinity;
+		for(var i = 0; i < data.length; i++){
+			for(var j in data[i].NumStudents){
+				if(data[i].NumStudents[j] < dot_min){
+					dot_min = data[i].NumStudents[j];
+				} 
+				if(data[i].NumStudents[j] > dot_max){
+					dot_max = data[i].NumStudents[j];
+				}
+			}
+		}
+		if(dot_min < 40) dot_min  = 40;
+		var r_max = Math.ceil(Math.log(dot_max/10));
+		var r_min = Math.ceil(Math.log(dot_min/10));
+
+		var r_range = [];
+		var cum = 0;
+		for(var i = r_min; i < r_max; i+=3){
+			var v = Math.ceil(Math.exp(i) * 10);
+			var n = v.toString().length - 1;
+			v = d3.round(v, -n);
+			var r = Math.log(v/10);
+			r_range.push({
+				'r' : r,
+				'cum' : cum 
+			});
+			cum += r*2;
+		}
+
+		if(r_max - r_range[r_range.length-1].r > 0){
+			r_range.push({
+				r : r_max,
+				cum : cum
+			});
+		}
+		var numDots = 5;
+		var interval = (dot_max - dot_min) / numDots;
+
+		var legend_g = legend_svg.append('g')
+		.attr('transform', 'translate(' + [legend_margin.left, legend_margin.top] + ')');
+
+		var dot_enter = legend_g.selectAll('.dot-legend')
+		.data(r_range)
+		.enter()
+		.append('g').attr('class', '.dot-legend')
+		.attr('transform', function(d, i){
+			return 'translate(' + [r_max, d.cum + d.r + 20*i] + ')';
+		});
+		
+		dot_enter.append('circle')
+		.attr('cx', 0)
+		.attr('cy', 0)
+		.attr('r', function(d){
+			return d.r;
+		})
+		.attr('fill', function(d){
+			return 'gray';
+		})
+		.attr('stroke', 'black').attr('stroke-width', 1);
+
+		dot_enter.append('text')
+		.attr('text-anchor', 'start')
+		.attr('dominant-baseline', 'middle')
+		.attr('x', r_max*2 + 5)
+		.attr('y', 2)
+		.text(function(d, i){
+			if(i == r_range.length - 1){
+				return Math.round(dot_max);
+			}
+			else {
+				var value = Math.exp(d.r) * 10;
+				return Math.round(value);
+			}
+		});
+	};
+
+	this.hideLegend = function(){
+		if(legend_svg)
+			legend_svg.remove();
+	}
 	/*
 	* Accessors
 	*/

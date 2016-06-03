@@ -66,3 +66,18 @@ $('#box-grad').click(function(){
 		boxPlot.update();
 	}
 });
+
+
+$('ul#view-nav-bar li').each(function(){
+	$(this).on('click', function(){
+		var id = $(this).attr('id');
+		if(id === 'scatter-plot-tab-btn'){
+			if(scatterPlot)
+				scatterPlot.showLegend();
+		}
+		else if(id === 'treemap-tab-btn'){
+			if(scatterPlot)
+				scatterPlot.hideLegend();
+		}
+	});
+});

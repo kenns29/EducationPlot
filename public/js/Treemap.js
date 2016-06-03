@@ -18,7 +18,7 @@ function Treemap(){
 			svg.remove();
 		}
 		svg = d3.select(graph_container).append('svg')
-		.attr('width', width).attr('height', height);
+		.attr('width', '100%').attr('height', '100%');
 
 		treemap_g = svg.append('g')
 		.attr('transform', 'translate(' + [margin.left, margin.top] + ')');
