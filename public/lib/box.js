@@ -152,30 +152,30 @@ d3.box = function() {
           .remove();
 
       // Update outliers.
-      var outlier = g.selectAll("circle.outlier")
-          .data(outlierIndices, Number);
+      // var outlier = g.selectAll("circle.outlier")
+      //     .data(outlierIndices, Number);
 
-      outlier.enter().insert("circle", "text")
-          .attr("class", "outlier")
-          .attr("r", 5)
-          .attr("cx", width / 2)
-          .attr("cy", function(i) { return x0(d[i]); })
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
-          .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1);
+      // outlier.enter().insert("circle", "text")
+      //     .attr("class", "outlier")
+      //     .attr("r", 5)
+      //     .attr("cx", width / 2)
+      //     .attr("cy", function(i) { return x0(d[i]); })
+      //     .style("opacity", 1e-6)
+      //   .transition()
+      //     .duration(duration)
+      //     .attr("cy", function(i) { return x1(d[i]); })
+      //     .style("opacity", 1);
 
-      outlier.transition()
-          .duration(duration)
-          .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1);
+      // outlier.transition()
+      //     .duration(duration)
+      //     .attr("cy", function(i) { return x1(d[i]); })
+      //     .style("opacity", 1);
 
-      outlier.exit().transition()
-          .duration(duration)
-          .attr("cy", function(i) { return x1(d[i]); })
-          .style("opacity", 1e-6)
-          .remove();
+      // outlier.exit().transition()
+      //     .duration(duration)
+      //     .attr("cy", function(i) { return x1(d[i]); })
+      //     .style("opacity", 1e-6)
+      //     .remove();
 
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);

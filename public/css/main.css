@@ -247,7 +247,6 @@ body {
 }
 
 .box .outlier {
-	display: none;
 	fill: none;
 	stroke: #ccc;
 }

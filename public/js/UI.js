@@ -53,6 +53,7 @@ $('#box-pell').click(function(){
 	if(!$(this).hasClass('active')){
 		$(this).addClass('active');
 		$('#box-grad').removeClass('active');
+		opt.box_plot_pell = true;
 		boxPlot.update();
 	}
 });
@@ -61,6 +62,7 @@ $('#box-grad').click(function(){
 	if(!$(this).hasClass('active')){
 		$(this).addClass('active');
 		$('#box-pell').removeClass('active');
+		opt.box_plot_pell = false;
 		boxPlot.update();
 	}
 });

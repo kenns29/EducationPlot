@@ -25,33 +25,52 @@ function BoxPlot() {
 	};
 
 	this.update = function() {
-		var stripped_data = [];
-		stripped_data[0] = [];
-		stripped_data[1] = [];
-		stripped_data[2] = [];
-		stripped_data[0].sector = "public";
-		stripped_data[1].sector = "private-not-for-profit";
-		stripped_data[2].sector = "private-for-profit";
-		data.forEach(function(d) {
-			var rate = (opt.box_plot_pell ? d.Pell : d.GradRate)[state.year];
-			if(rate != -1) {
-				stripped_data[d.InstSector - 1].push(rate);
-				if (rate > max) max = rate;
-				if (rate < min) min = rate;
-			}
-		});
-		console.log(svg);
-		svg = d3.select(container).selectAll("svg")
-		      .data(stripped_data)
-		    .enter().append("svg")
-		      .attr("class", function(i) {
-		      	return "box box-" + i.sector;
-		      })
-		      .attr("width", 30 + margin.left + margin.right)
-		      .attr("height", height + margin.bottom + margin.top)
-		    .append("g")
-		      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-		      .call(chart);
+		if(svg === undefined) {
+			var stripped_data = [];
+			stripped_data[0] = [];
+			stripped_data[1] = [];
+			stripped_data[2] = [];
+			stripped_data[0].sector = "public";
+			stripped_data[1].sector = "private-not-for-profit";
+			stripped_data[2].sector = "private-for-profit";
+			data.forEach(function(d) {
+				var rate = (opt.box_plot_pell ? d.Pell : d.GradRate)[state.year];
+				if(rate != -1) {
+					stripped_data[d.InstSector - 1].push(rate);
+					if (rate > max) max = rate;
+					if (rate < min) min = rate;
+				}
+			});
+			chart.domain([0, 100]);
+			svg = d3.select(container).selectAll("svg")
+			      .data(stripped_data)
+			    .enter().append("svg")
+			      .attr("class", function(i) {
+			      	return "box box-" + i.sector;
+			      })
+			      .attr("width", 30 + margin.left + margin.right)
+			      .attr("height", height + margin.bottom + margin.top)
+			    .append("g")
+			      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			      .call(chart);
+		} else {
+			var stripped_data = [];
+			stripped_data[0] = [];
+			stripped_data[1] = [];
+			stripped_data[2] = [];
+			stripped_data[0].sector = "public";
+			stripped_data[1].sector = "private-not-for-profit";
+			stripped_data[2].sector = "private-for-profit";
+			data.forEach(function(d) {
+				var rate = (opt.box_plot_pell ? d.Pell : d.GradRate)[state.year];
+				if(rate != -1) {
+					stripped_data[d.InstSector - 1].push(rate);
+					if (rate > max) max = rate;
+					if (rate < min) min = rate;
+				}
+			});
+			svg.data(stripped_data).call(chart.duration(1000));
+		}
 		return this;
 	};
 
