@@ -2,6 +2,7 @@ function draw(data, confs){
 	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
 	treemap = new Treemap().data(data).init().update();
+	boxPlot = new BoxPlot().data(data).init().update();
 	init_search(data);
 	inst_label();
 	inst_confs(confs);

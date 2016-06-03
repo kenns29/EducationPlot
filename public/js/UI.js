@@ -45,5 +45,6 @@ $('#multiple-select-checkbox').change(function(){
 		$('#tokenfield-div').hide();
 		opt.multiple_select = false;
 		scatterPlot.search();
+		scatterPlot.removeTrajectory();
 	}
 });

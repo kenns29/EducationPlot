@@ -112,14 +112,28 @@
 
 #container #container_up #legend{
 	width: 20%;
-	height: 100%;
+	height: 60%;
 	margin: auto;
 	float: left;
 }
+
 #container #container_up #legend #dot-legend-container{
 	width : 100%;
-	height : 30%;
+	height : 60%;
 }
+
+#container #container_up #legend #multiple-school-tags{
+	width : 100%;
+	height : 40%;
+}
+
+#container #container_up #box_plot{
+	width: 20%;
+	height: 40%;
+	margin: auto;
+	float: left;
+}
+
 #container #container_bottom #slider-title{
 	width: 50%;
 	height: 30;
@@ -193,5 +207,48 @@ input[type="radio"].styled:checked label:after,
 
 .tokenfield .token .token-label
 {
-  max-width: 250px !important;
+	max-width: 250px !important;
 }
+
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.box {
+  	font: 10px sans-serif;
+}
+
+.box-public line,
+.box-public rect,
+.box-public circle {
+	fill: #fff;
+	stroke: #4daf4a;
+	stroke-width: 1.5px;
+}
+
+.box-private-not-for-profit line,
+.box-private-not-for-profit rect,
+.box-private-not-for-profit circle {
+	fill: #fff;
+	stroke: #984ea3;
+	stroke-width: 1.5px;
+}
+
+.box-private-for-profit line,
+.box-private-for-profit rect,
+.box-private-for-profit circle {
+	fill: #fff;
+	stroke: #ff7f00;
+	stroke-width: 1.5px;
+}
+
+.box .center {
+  	stroke-dasharray: 3,3;
+}
+
+.box .outlier {
+	display: none;
+	fill: /*none;
+	stroke*/: #ccc;
+}
+
