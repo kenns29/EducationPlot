@@ -214,6 +214,10 @@ body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#box-pell {
+	margin-left: 50px;
+}
+
 .box {
   	font: 10px sans-serif;
 }
@@ -245,9 +249,3 @@ body {
 .box .center {
   	stroke-dasharray: 3,3;
 }
-
-.box .outlier {
-	fill: none;
-	stroke: #ccc;
-}
-
