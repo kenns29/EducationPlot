@@ -127,9 +127,23 @@
 	height : 40%;
 }
 
+#container #container_up #legend #box_plot-container{
+	width : 100%;
+	height : 400px;
+	margin : auto;
+}
+
+#container #container_up #legend #box-pell{
+	height : 35px;
+}
+
+#container #container_up #legend #box-grad{
+	height : 35px;
+}
+
 #container #container_up #box_plot{
-	width: 20%;
-	height: 40%;
+	width: 100%;
+	height: calc(100% - 35px);
 	margin: auto;
 	float: left;
 }
