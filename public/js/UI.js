@@ -81,3 +81,9 @@ $('ul#view-nav-bar li').each(function(){
 		}
 	});
 });
+
+$(window).resize(function(){
+	if(scatterPlot){
+		scatterPlot.resize();
+	}
+});

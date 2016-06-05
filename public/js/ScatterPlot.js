@@ -21,10 +21,10 @@ function ScatterPlot(){
 		height = H - margin.top - margin.bottom;
 
 		svg = d3.select(graph_container).append("svg")
-		.attr("width", '100%')
-		.attr("height", '100%')
+		.attr("width", W)
+		.attr("height", H)
 		.attr('viewport', '0 0 100% 100%')
-		.attr('preserveAspectRatio', 'xMinYMin slice')
+		.attr('preserveAspectRatio', 'xMinYMin meet')
 		.append("g")
 		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
@@ -64,10 +64,35 @@ function ScatterPlot(){
 
 		//init the dot legend
 		this.showLegend();
+
+		
+
+		$(d3.select(graph_container).select('svg').node()).resize(function(){
+
+			W = $(this).width();
+			H = $(this).height();
+			console.log('resize', W, H);
+			width = W - margin.left - margin.right;
+			height = H - margin.top - margin.bottom;
+			this.update();
+		});
+		
 		return this;
 	};
+	
+	this.resize = function(){
+		//size
+		W = $(graph_container).width();
+		H = $(graph_container).height();
+		margin = {top: 20, right: 60, bottom: 40, left: 60};
+		width = W - margin.left - margin.right;
+		height = H - margin.top - margin.bottom;
+		d3.select(graph_container).select('svg').attr('width', W).attr('height', H);
+		this.update(true);
 
-	this.update = function(){
+	};
+
+	this.update = function(onResize){
 		mode = ScatterPlot.SCATTER;
 		// this.removeTrajectory();
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
@@ -79,6 +104,17 @@ function ScatterPlot(){
 			return "<span style='color:white'>" + d.InstName + "</span>";
 		});
 		svg.call(tip);
+
+		//init scale and axis
+		x = d3.scale.linear().range([0, width]).domain([-10,110]);
+		y = d3.scale.linear().range([height, 0]).domain([-10,110]);
+		xAxis = d3.svg.axis().scale(x).orient("bottom")
+		.innerTickSize(-height)
+		.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+		yAxis = d3.svg.axis().scale(y).orient("left")
+		.innerTickSize(-width)
+		.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+
 		//select the dots
 		var dotSel = svg.selectAll('.dot')
 		.data(data.filter(function(d, i){
@@ -118,7 +154,9 @@ function ScatterPlot(){
 
 		dotUpdate
 		.transition()
-		.duration(500)
+		.duration(function(){
+			return onResize ? 0 : 500;
+		})
 		.attr("r", function(d){
 			var value =  Math.max(0, d["NumStudents"][state.year]);
 			return Math.ceil(Math.log(Math.max(2, value/10)));
@@ -461,7 +499,7 @@ function ScatterPlot(){
 			legend_svg.remove();
 		}
 		legend_svg = d3.select(legend_container).append('svg')
-		.attr('width', legend_width).attr('height', legend_height);
+		.attr('width', '100%').attr('height', '100%');
 
 		var dot_min = Infinity, dot_max = -Infinity;
 		for(var i = 0; i < data.length; i++){
