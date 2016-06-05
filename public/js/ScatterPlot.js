@@ -9,6 +9,7 @@ function ScatterPlot(){
 	var xAxis, yAxis, x, y;
 	var mode = ScatterPlot.SCATTER;
 
+	var init_width, init_height;
 	this.init = function(){
 		//title
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
@@ -20,14 +21,30 @@ function ScatterPlot(){
 		width = W - margin.left - margin.right;
 		height = H - margin.top - margin.bottom;
 
-		svg = d3.select(graph_container).append("svg")
-		.attr("width", W)
-		.attr("height", H)
+		svg = d3.select(graph_container)
+		// .style('display', 'inline-block')
+		// .style('position', 'relative')
+		// .style('height', 0)
+		// .style('width', '100%')
+		// .style('padding-bottom', '100%')
+		// .style('vertical-align', 'top')
+		// .style('overflow', 'hidden')
+		.append("svg")
+		.attr('width', '100%')
+		.attr('height', '100%')
 		.attr('viewport', '0 0 100% 100%')
-		.attr('preserveAspectRatio', 'xMinYMin meet')
+		.attr('preserveAspectRatio', 'xMidYMid meet')
+		// .style('display', 'inline-block')
+		// .style('position', 'absolute')
+		// .style('top', 0)
+		// .style('left', 0)
 		.append("g")
 		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
+		init_width = $(d3.select(graph_container).select('svg').node()).width();
+		init_height = $(d3.select(graph_container).select('svg').node()).height();
+		console.log('init_width', init_width);
+		console.log('init_height', init_height);
 		//init scale and axis
 		x = d3.scale.linear().range([0, width]).domain([-10,110]);
 		y = d3.scale.linear().range([height, 0]).domain([-10,110]);
@@ -82,12 +99,24 @@ function ScatterPlot(){
 	
 	this.resize = function(){
 		//size
-		W = $(graph_container).width();
-		H = $(graph_container).height();
-		margin = {top: 20, right: 60, bottom: 40, left: 60};
-		width = W - margin.left - margin.right;
-		height = H - margin.top - margin.bottom;
-		d3.select(graph_container).select('svg').attr('width', W).attr('height', H);
+		// W = $(graph_container).width();
+		// H = $(graph_container).height();
+		// margin = {top: 20, right: 60, bottom: 40, left: 60};
+		// width = W - margin.left - margin.right;
+		// height = H - margin.top - margin.bottom;
+		// d3.select(graph_container).select('svg').attr('width', W).attr('height', H);
+
+		var currentWidth = $(d3.select(graph_container).select('svg').node()).width();
+		var currentHeight = $(d3.select(graph_container).select('svg').node()).height();
+
+		var scaleX = currentWidth / init_width;
+		var scaleY = currentHeight / init_height;
+		console.log('currentWidth', currentWidth);
+		console.log('currentHeight', currentHeight);
+		svg.attr('transform', function(){
+			return 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left, margin.top] + ')';
+		});
+
 		this.update(true);
 
 	};
