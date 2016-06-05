@@ -4,12 +4,14 @@ function ScatterPlot(){
 	var title_container = '#title';
 	var legend_container = '#dot-legend-container';
 	var data;
-	var W, H, margin, width, height;
-	var svg, legend_svg;
+	var width, height, W, H;
+	var margin, legend_margin;
+	var svg, legend_svg, legend_g;
 	var xAxis, yAxis, x, y;
 	var mode = ScatterPlot.SCATTER;
 
 	var init_width, init_height;
+	var init_legend_width, init_legend_height;
 	this.init = function(){
 		//title
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
@@ -43,8 +45,8 @@ function ScatterPlot(){
 
 		init_width = $(d3.select(graph_container).select('svg').node()).width();
 		init_height = $(d3.select(graph_container).select('svg').node()).height();
-		console.log('init_width', init_width);
-		console.log('init_height', init_height);
+		// console.log('init_width', init_width);
+		// console.log('init_height', init_height);
 		//init scale and axis
 		x = d3.scale.linear().range([0, width]).domain([-10,110]);
 		y = d3.scale.linear().range([height, 0]).domain([-10,110]);
@@ -99,24 +101,31 @@ function ScatterPlot(){
 	
 	this.resize = function(){
 		//size
-		// W = $(graph_container).width();
-		// H = $(graph_container).height();
-		// margin = {top: 20, right: 60, bottom: 40, left: 60};
-		// width = W - margin.left - margin.right;
-		// height = H - margin.top - margin.bottom;
-		// d3.select(graph_container).select('svg').attr('width', W).attr('height', H);
+		var currentWidth, currentHeight, scaleX, scaleY;
+		if($('#scatter-plot-tab-btn').hasClass('active')){
+			currentWidth = $(this.svg()).width();
+			currentHeight = $(this.svg()).height();
+		}
+		else{
+			currentWidth = $(treemap.svg()).width();
+			currentHeight = $(treemap.svg()).height();
+		}
 
-		var currentWidth = $(d3.select(graph_container).select('svg').node()).width();
-		var currentHeight = $(d3.select(graph_container).select('svg').node()).height();
+		scaleX = currentWidth / init_width;
+		scaleY = currentHeight / init_height;
 
-		var scaleX = currentWidth / init_width;
-		var scaleY = currentHeight / init_height;
-		console.log('currentWidth', currentWidth);
-		console.log('currentHeight', currentHeight);
 		svg.attr('transform', function(){
 			return 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left, margin.top] + ')';
 		});
 
+		var current_legend_width = $(legend_svg.node()).width();
+		var current_legend_height = $(legend_svg.node()).height();
+		var legend_scale_x = current_legend_width / init_legend_width;
+		var legend_scale_y = current_legend_height / init_legend_height;
+
+		legend_g.attr('transform', function(){
+			return 'scale(' + [legend_scale_x, legend_scale_y] + ') translate(' + [legend_margin.left, legend_margin.top] + ')';
+		});
 		this.update(true);
 
 	};
@@ -418,7 +427,7 @@ function ScatterPlot(){
 	};
 
 	this.removeTrajectory = function(){
-		// svg.selectAll('.t-dot').remove();
+		// svg.selectAll('.t-dot').remove();0
 		// svg.selectAll('.t-link').remove();
 		svg.selectAll('.trajectory').remove();
 		mode = ScatterPlot.SCATTER;
@@ -523,12 +532,15 @@ function ScatterPlot(){
 	this.showLegend = function(){
 		var legend_width = $(legend_container).width();
 		var legend_height = $(legend_container).height();
-		var legend_margin = {top:100, bottom:20, left:10, right:10};
+		legend_margin = {top:100, bottom:20, left:10, right:10};
 		if(legend_svg){
 			legend_svg.remove();
 		}
 		legend_svg = d3.select(legend_container).append('svg')
 		.attr('width', '100%').attr('height', '100%');
+
+		init_legend_width = $(legend_svg.node()).width();
+		init_legend_height = $(legend_svg.node()).height();
 
 		var dot_min = Infinity, dot_max = -Infinity;
 		for(var i = 0; i < data.length; i++){
@@ -568,7 +580,7 @@ function ScatterPlot(){
 		var numDots = 5;
 		var interval = (dot_max - dot_min) / numDots;
 
-		var legend_g = legend_svg.append('g')
+		legend_g = legend_svg.append('g')
 		.attr('transform', 'translate(' + [legend_margin.left, legend_margin.top] + ')');
 
 		var dot_enter = legend_g.selectAll('.dot-legend')
@@ -625,6 +637,10 @@ function ScatterPlot(){
 
 	this.mode = function(_){
 		return mode;
+	};
+
+	this.svg = function(){
+		return d3.select(graph_container).select('svg').node();
 	};
 }
 

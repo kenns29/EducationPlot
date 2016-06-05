@@ -83,7 +83,9 @@ $('ul#view-nav-bar li').each(function(){
 });
 
 $(window).resize(function(){
-	if(scatterPlot){
-		scatterPlot.resize();
-	}
+	if(scatterPlot) scatterPlot.resize();
+	if(instLabel) instLabel.resize();
+	if(treemap) treemap.resize();
+	if(slider) slider.resize();
+	
 });

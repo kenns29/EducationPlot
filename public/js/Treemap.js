@@ -5,6 +5,7 @@ function Treemap(){
 	var margin = {left:20, right:20, top:20, bottom:20};
 	var svg, treemap_g;
 	var treemap;
+
 	this.init = function(){
 		width = $(graph_container).width();
 		height = $(graph_container).height();
@@ -147,6 +148,32 @@ function Treemap(){
 			scatterPlot.InstClick(d);
 		});
 		return this;
+	};
+
+	this.resize = function(){
+		var currentWidth, currentHeight, scaleX, scaleY;
+		if($('#scatter-plot-tab-btn').hasClass('active')){
+			currentWidth = $(scatterPlot.svg()).width();
+			currentHeight = $(scatterPlot.svg()).height();
+		}
+		else{
+			currentWidth = $(svg.node()).width();
+			currentHeight = $(svg.node()).height();
+		}
+		
+		scaleX = currentWidth / width;
+		scaleY = currentHeight / height;
+
+		treemap_g.attr('transform', 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left, margin.top] + ')');
+		return this;
+	};
+
+
+	/*
+	* Accessor
+	*/
+	this.svg = function(){
+		return svg.node();
 	};
 
 	this.data = function(_){

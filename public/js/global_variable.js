@@ -23,3 +23,5 @@ var color_deep = ["#4daf4a","#984ea3", "#ff7f00"];
 var scatterPlot = null;
 var treemap = null;
 var boxPlot = null;
+var instLabel = null;
+var slider = null;
