@@ -34,14 +34,16 @@
 		<div id = "control">
 			<div id = "school-type-selection-control"></div>
 			<div id = "data-control">
+				<div id = "data-filter-control">
+					<div id = "show-filter-missing-data-div" class="checkbox checkbox-primary" >
+						<label for = "filter-missing-data-checkbox">Filter Missing Data</label>
+						<input id = "filter-missing-data-checkbox" type="checkbox" class="styled">
+					</div>
 
-				<div id = "show-filter-missing-data-div" class="checkbox checkbox-primary">
-					<input id = "filter-missing-data-checkbox" type="checkbox" class="styled">
-					<label for = "filter-missing-data-checkbox">Filter Missing Data</label>
-				</div>
-				<div id = "show-mean-std-checkbox-div" class="checkbox checkbox-primary">
-					<input id = "show-mean-std-checkbox" type = "checkbox" class = "styled">
-					<label for = "show-mean-std-checkbox">Show Mean and Std</label>
+					<div id = "show-mean-std-checkbox-div" class="checkbox checkbox-primary">
+						<label id = "show-mean-std-checkbox-label" for = "show-mean-std-checkbox">Show Mean and Std</label>
+						<input id = "show-mean-std-checkbox" type = "checkbox" class = "styled">
+					</div>
 				</div>
 				<div id = "conference-selection-control" class = "dropdown pull-right">
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

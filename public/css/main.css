@@ -18,6 +18,8 @@
   width: 100vw;
   height: 56.25vw;
   /* 100/56.25 = 1.778 */
+  min-width : 800px;
+  min-height : 450px;
   max-height: 100vh;
   max-width: 177.78vh;
   /* 16/9 = 1.778 */
@@ -57,36 +59,34 @@
 #container #container_up #control #data-control{
 	width:100%;
 	height: 120px;
-	margin:auto;
+	margin : auto;
 }
-#container #container_up #control #data-control #conference-selection-control{
-	/*width : 200px;*/
+
+#container #container_up #control #data-control #data-filter-control{
 	width : 60%;
-	height:30px;
 	float:right;
 }
-#container #container_up #control #data-control #show-filter-missing-data-div{
-	/*width : 170px;*/
-	width : 80%;
-	height:20px;
-	float:right;
+
+#container #container_up #control #data-control #data-filter-control #show-filter-missing-data-div{
+	display: block;
+	float:left;
+
 }
-#container #container_up #control #data-control #show-mean-std-checkbox-div{
-	/*width : 170px;*/
-	width : 80%;
-	height:20px;
+#container #container_up #control #data-control #data-filter-control #show-mean-std-checkbox-div{
+	clear : left;
+	display: block;
+	float: left;
+}
+
+#container #container_up #control #data-control #conference-selection-control{
+
 	float:right;
 }
 
 #container #container_up #control #schoold-selection-autocomplete-div{
-	/*width : 300px;*/
-	width : 80%;
-	height:30px;
 	float:right;
 }
 #container #container_up #control #trajectory-control{
-	width: 80%;
-	height: 20%;
 	float : right;
 }
 #container #container_up #control #show-selection-div{

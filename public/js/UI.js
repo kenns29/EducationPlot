@@ -83,6 +83,7 @@ $('ul#view-nav-bar li').each(function(){
 });
 
 $(window).resize(function(){
+	//resizes all svg and their contents
 	if(scatterPlot) scatterPlot.resize();
 	if(instLabel) instLabel.resize();
 	if(treemap) treemap.resize();
