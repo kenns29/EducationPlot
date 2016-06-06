@@ -527,9 +527,10 @@ function ScatterPlot(){
 		self.update();
 		// TODO: Use solution that isn't so taxing!
 		treemap.update();
-	}
+	};
 
 	this.showLegend = function(){
+		var space = 20;
 		var legend_width = $(legend_container).width();
 		var legend_height = $(legend_container).height();
 		legend_margin = {top:100, bottom:20, left:10, right:10};
@@ -588,7 +589,7 @@ function ScatterPlot(){
 		.enter()
 		.append('g').attr('class', '.dot-legend')
 		.attr('transform', function(d, i){
-			return 'translate(' + [r_max, d.cum + d.r + 20*i] + ')';
+			return 'translate(' + [r_max, d.cum + d.r + space*i] + ')';
 		});
 		
 		dot_enter.append('circle')
@@ -621,7 +622,7 @@ function ScatterPlot(){
 	this.hideLegend = function(){
 		if(legend_svg)
 			legend_svg.remove();
-	}
+	};
 	/*
 	* Accessors
 	*/

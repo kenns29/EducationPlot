@@ -9,9 +9,23 @@
  }
 
 #container{
-	width: 100%;
+/*	width: 100%;
 	height: 100%;
-	margin: auto;
+	margin: auto;*/
+	
+  width: 100vw;
+  height: 56.25vw;
+  /* 100/56.25 = 1.778 */
+  max-height: 100vh;
+  max-width: 177.78vh;
+  /* 16/9 = 1.778 */
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* vertical center */
+  left: 0;
+  right: 0;
 }
 
 #container #container_up{
@@ -44,29 +58,34 @@
 	margin:auto;
 }
 #container #container_up #control #data-control #conference-selection-control{
-	width : 200px;
+	/*width : 200px;*/
+	width : 60%;
 	height:30px;
 	float:right;
 }
 #container #container_up #control #data-control #show-filter-missing-data-div{
-	width : 170px;
+	/*width : 170px;*/
+	width : 80%;
 	height:20px;
 	float:right;
 }
 #container #container_up #control #data-control #show-mean-std-checkbox-div{
-	width : 170px;
+	/*width : 170px;*/
+	width : 80%;
 	height:20px;
 	float:right;
 }
 
 #container #container_up #control #schoold-selection-autocomplete-div{
-	width : 300px;
+	/*width : 300px;*/
+	width : 80%;
 	height:30px;
 	float:right;
 }
 #container #container_up #control #trajectory-control{
-	width: 100%;
+	width: 80%;
 	height: 20%;
+	float : right;
 }
 #container #container_up #control #show-selection-div{
 	width:100%;
