@@ -66,7 +66,7 @@ function ScatterPlot(){
 		.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 
 		//x axis
-		svg.append("g")
+		var x_axis_g = svg.append("g")
 		.attr("class", "x axis")
 		.attr("transform", "translate( 0, " + height + ")")
 		.call(xAxis)
@@ -81,11 +81,24 @@ function ScatterPlot(){
 		.data(yAxis.tickValues())
 		.enter().append('line').attr('class', 'scatter horizontal_line')
 		.attr('x1', 0).attr('x2', width)
-		.attr('y1', function(d){
-			return y(d);
-		}).attr('y2', function(d){return y(d);}).attr('stroke-width', 1).attr('stroke', 'lightgrey');
+		.attr('y1', function(d){return y(d);}).attr('y2', function(d){return y(d);})
+		.attr('stroke-width', 1).attr('stroke', 'lightgrey');
+
+
+		svg.append('line')
+		.attr('class', 'scatter y-axis-line')
+		.attr('x1', 0).attr('x2', width)
+		.attr('y1', function(d){return y(-10);}).attr('y2', function(d){return y(-10);})
+		.attr('stroke-width', 1).attr('stroke', 'black');
+
+		svg.selectAll('.scatter.y-axis-tick')
+		.data(yAxis.tickValues())
+		.enter().append('line').attr('class', 'scatter y-axis-tick')
+		.attr('x1', 0).attr('x2', -4)
+		.attr('y1', function(d){return y(d);}).attr('y2', function(d){return y(d);})
+		.attr('stroke-width', 1).attr('stroke', 'black');
 		//y axis
-		svg.append("g")
+		var y_axis_g = svg.append("g")
 		.attr("class","y axis")
 		.call(yAxis)
 		.append("text")
@@ -107,6 +120,21 @@ function ScatterPlot(){
 		.attr('y1', height)
 		.attr('y2', 0)
 		.attr('stroke-width', 1).attr('stroke', 'lightgrey');
+
+
+		svg.append('line')
+		.attr('class', 'scatter x-axis-line')
+		.attr('x1', function(d){return x(-10);}).attr('x2', function(d){return x(-10);})
+		.attr('y1', height).attr('y2', 0)
+		.attr('stroke-width', 1).attr('stroke', 'black');
+
+
+		svg.selectAll('.scatter.x-axis-tick')
+		.data(yAxis.tickValues())
+		.enter().append('line').attr('class', 'scatter y-axis-tick')
+		.attr('x1', function(d){return x(d);}).attr('x2', function(d){return x(d);})
+		.attr('y1', height).attr('y2', height + 4)
+		.attr('stroke-width', 1).attr('stroke', 'black');
 		//init the dot legend
 		this.showLegend();
 		

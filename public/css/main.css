@@ -3,12 +3,11 @@
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
-  stroke-width : 1px;
+  stroke-width : 0px;
 }
 
 .axis .tick line{
-    opacity: 1;
-    stroke-width : 1px;
+
  }
 
 #container{
