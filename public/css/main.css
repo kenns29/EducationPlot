@@ -18,8 +18,8 @@
   width: 100vw;
   height: 56.25vw;
   /* 100/56.25 = 1.778 */
-  min-width : 800px;
-  min-height : 450px;
+  min-width : 1000px;
+  min-height : 562.5px;
   max-height: 100vh;
   max-width: 177.78vh;
   /* 16/9 = 1.778 */
@@ -45,6 +45,7 @@
 }
 
 #container #container_up #control{
+	min-width:200px;
 	width: 20%;
 	height: 100%;
 	margin: auto;
@@ -132,6 +133,7 @@
 }
 
 #container #container_up #legend{
+	min-width: 200px;
 	width: 20%;
 	height: 60%;
 	margin: auto;
@@ -154,11 +156,13 @@
 	margin : auto;
 }
 
-#container #container_up #legend #box-pell{
+#container #container_up #legend #box_plot-container #box-pell{
+	display:inline-block;
 	height : 35px;
 }
 
-#container #container_up #legend #box-grad{
+#container #container_up #legend #box_plot-container #box-grad{
+	display: inline-block;
 	height : 35px;
 }
 
