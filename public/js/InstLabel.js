@@ -2,6 +2,7 @@ function InstLabel(){
 	var init_width, init_height;
 	var svg, g;
 	var margin;
+	var aspect_ratio;
 	this.init = function(){
 		var width = $('#school-type-selection-control').width();
 		var height = $('#school-type-selection-control').height();
@@ -10,9 +11,8 @@ function InstLabel(){
 		var boxWidth = 30;
 
 		var checkboxWidth = 20;
-		margin = {top: 60, right: 20, bottom: 40, left: width - checkboxWidth - 10};
-		var W = width - margin.left - margin.right;
-		var H = height - margin.top - margin.bottom;
+		
+		
 		
 
 		svg = d3.select('#school-type-selection-control').append('svg')
@@ -20,11 +20,20 @@ function InstLabel(){
 		.attr('preserveAspectRatio', 'xMidYMid meet')
 		.attr('width', '100%').attr('height', '100%');
 
-		init_width = $(svg.node()).width();
-		init_height = $(svg.node()).height();
+		aspect_ratio = width / height;
+
+		init_width = 330;
+		init_height = init_width / aspect_ratio;
+
+		margin = {top: 60, right: 20, bottom: 40, left: init_width - checkboxWidth - 10};
+		var W = init_width - margin.left - margin.right;
+		var H = init_height - margin.top - margin.bottom;
+
+		var scaleX = width / init_width;
+		var scaleY = height / init_height;
 		g = svg.append('g')
 		.attr('transform', function(){
-			return 'translate(' + [margin.left,  margin.top] + ')';
+			return 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left,  margin.top] + ')';
 		});
 
 		var boxEnter = g.selectAll('g')
@@ -96,8 +105,9 @@ function InstLabel(){
 		var currentHeight = $(svg.node()).height();
 
 		var scaleX = currentWidth / init_width;
-		var scaleY = currentHeight / init_height;
+		var scaleY = scaleX;
 
+		console.log('scaleX', scaleX, 'scaleY', scaleY);
 		g.attr('transform', 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left, margin.top] + ')');
 		return this;
 	};

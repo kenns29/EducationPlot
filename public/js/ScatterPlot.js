@@ -12,6 +12,7 @@ function ScatterPlot(){
 
 	var init_width, init_height;
 	var init_legend_width, init_legend_height;
+	var aspect_ratio, legend_aspect_ratio;
 	this.init = function(){
 		//title
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
@@ -20,9 +21,16 @@ function ScatterPlot(){
 		W = $(graph_container).width();
 		H = $(graph_container).height();
 		margin = {top: 20, right: 60, bottom: 40, left: 60};
-		width = W - margin.left - margin.right;
-		height = H - margin.top - margin.bottom;
+		
 
+		aspect_ratio = W / H;
+		init_width = 1000;
+		init_height = init_width / aspect_ratio;
+
+		width = init_width - margin.left - margin.right;
+		height = init_height - margin.top - margin.bottom;
+		var scaleX = W / init_width;
+		var scaleY = H / init_height;
 		svg = d3.select(graph_container)
 		// .style('display', 'inline-block')
 		// .style('position', 'relative')
@@ -41,20 +49,20 @@ function ScatterPlot(){
 		// .style('top', 0)
 		// .style('left', 0)
 		.append("g")
-		.attr("transform","translate(" + margin.left + "," + margin.top + ")");
+		.attr("transform","scale(" +[scaleX, scaleY]+ ") translate(" + margin.left + "," + margin.top + ")");
 
-		init_width = $(d3.select(graph_container).select('svg').node()).width();
-		init_height = $(d3.select(graph_container).select('svg').node()).height();
+		// init_width = $(d3.select(graph_container).select('svg').node()).width();
+		// init_height = $(d3.select(graph_container).select('svg').node()).height();
 		// console.log('init_width', init_width);
 		// console.log('init_height', init_height);
 		//init scale and axis
 		x = d3.scale.linear().range([0, width]).domain([-10,110]);
 		y = d3.scale.linear().range([height, 0]).domain([-10,110]);
 		xAxis = d3.svg.axis().scale(x).orient("bottom")
-		.innerTickSize(-height)
+		// .innerTickSize(-height)
 		.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 		yAxis = d3.svg.axis().scale(y).orient("left")
-		.innerTickSize(-width)
+		// .innerTickSize(-width)
 		.tickValues([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
 
 		//x axis
@@ -69,6 +77,13 @@ function ScatterPlot(){
 		.style("text-anchor","end")
 		.text("Pell (%)");
 
+		svg.selectAll('.scatter.horizontal_line')
+		.data(yAxis.tickValues())
+		.enter().append('line').attr('class', 'scatter horizontal_line')
+		.attr('x1', 0).attr('x2', width)
+		.attr('y1', function(d){
+			return y(d);
+		}).attr('y2', function(d){return y(d);}).attr('stroke-width', 1).attr('stroke', 'lightgrey');
 		//y axis
 		svg.append("g")
 		.attr("class","y axis")
@@ -81,20 +96,19 @@ function ScatterPlot(){
 		.style("text-anchor", "end")
 		.text("Grad Rate (%)");
 
+		svg.selectAll('scatter.vertical_line')
+		.data(xAxis.tickValues())
+		.enter().append('line').attr('class', 'scatter vertical_line')
+		.attr('x1', function(d){
+			return x(d);
+		}).attr('x2', function(d){
+			return x(d);
+		})
+		.attr('y1', height)
+		.attr('y2', 0)
+		.attr('stroke-width', 1).attr('stroke', 'lightgrey');
 		//init the dot legend
 		this.showLegend();
-
-		
-
-		$(d3.select(graph_container).select('svg').node()).resize(function(){
-
-			W = $(this).width();
-			H = $(this).height();
-			console.log('resize', W, H);
-			width = W - margin.left - margin.right;
-			height = H - margin.top - margin.bottom;
-			this.update();
-		});
 		
 		return this;
 	};
@@ -114,6 +128,7 @@ function ScatterPlot(){
 		scaleX = currentWidth / init_width;
 		scaleY = currentHeight / init_height;
 
+		// console.log('scaleX', scaleX, 'scaleY', scaleY);
 		svg.attr('transform', function(){
 			return 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left, margin.top] + ')';
 		});
@@ -540,8 +555,16 @@ function ScatterPlot(){
 		legend_svg = d3.select(legend_container).append('svg')
 		.attr('width', '100%').attr('height', '100%');
 
-		init_legend_width = $(legend_svg.node()).width();
-		init_legend_height = $(legend_svg.node()).height();
+		// init_legend_width = $(legend_svg.node()).width();
+		// init_legend_height = $(legend_svg.node()).height();
+
+		legend_aspect_ratio = legend_width / legend_height;
+
+		init_legend_width = 350;
+		init_legend_height = init_legend_width / legend_aspect_ratio;
+
+		var scaleX = legend_width / init_legend_width;
+		var scaleY = legend_height / init_legend_height;
 
 		var dot_min = Infinity, dot_max = -Infinity;
 		for(var i = 0; i < data.length; i++){
@@ -582,7 +605,7 @@ function ScatterPlot(){
 		var interval = (dot_max - dot_min) / numDots;
 
 		legend_g = legend_svg.append('g')
-		.attr('transform', 'translate(' + [legend_margin.left, legend_margin.top] + ')');
+		.attr('transform', 'scale(' + [scaleX, scaleY] +') translate(' + [legend_margin.left, legend_margin.top] + ')');
 
 		var dot_enter = legend_g.selectAll('.dot-legend')
 		.data(r_range)
