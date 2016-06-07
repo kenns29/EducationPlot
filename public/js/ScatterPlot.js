@@ -548,6 +548,7 @@ function ScatterPlot(){
 				}
 			}
 		}
+		data;
 
 		if(tokens.length == 0) {
 			tokenfield.tokenfield("setTokens", []);
@@ -558,8 +559,17 @@ function ScatterPlot(){
 		tokens.forEach(function(inst) {
 			IDs.add(inst.value);
 		});
+		state.SelectedInsts = [];
 		data.forEach(function(inst) {
 			if(IDs.has(0) || IDs.has(inst.UnitID)) {
+				if(!IDs.has(0)) {
+					state.SelectedInsts.push({
+						label : inst.InstName,
+						pell : inst.Pell[state.year],
+						grad : inst.GradRate[state.year],
+						sect : inst.InstSector
+					});
+				}
 				inst.fade = false;
 			} else {
 				inst.fade = true;
@@ -570,6 +580,7 @@ function ScatterPlot(){
 		self.update();
 		// TODO: Use solution that isn't so taxing!
 		treemap.update();
+		boxPlot.update();
 	};
 
 	this.showLegend = function(){

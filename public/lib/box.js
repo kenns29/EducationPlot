@@ -9,7 +9,8 @@ d3.box = function() {
       value = Number,
       whiskers = boxWhiskers,
       quartiles = boxQuartiles,
-      tickFormat = null;
+      tickFormat = null,
+      oldSelect = [];
 
   // For each small multiple…
   function box(g) {
@@ -150,6 +151,39 @@ d3.box = function() {
           .attr("y2", x1)
           .style("opacity", 1e-6)
           .remove();
+
+      g.selectAll("circle.selected").remove();
+
+      var selected = g.selectAll("circle.selected")
+          .data(state.SelectedInsts); //Filter by institution!
+
+
+      selected.enter().insert("circle", "text")
+          .attr("class", "selected")
+          .attr("r", 2)
+          .attr("cx", width / 2)
+          .attr("cy", function(i) { return x0(i[opt.box_plot_pell ? "pell" : "grad"]);})
+          .style("opacity", 1e-6)
+        .transition()
+          .duration(duration)
+          .style("opacity", 1);
+
+      oldSelect = state.SelectedInsts;
+
+      // selected.filter(function(d) {
+      //   var remove = true;
+      //   for(var key in state.SelectedInsts) {
+      //     if(state.SelectedInsts[key] === d) {
+      //       remove = false;
+      //       break;
+      //     }
+      //   }
+      //   if(remove)
+      //     return true;
+      // }).transition()
+      //   .duration(duration)
+      //   .style("opacity", 1e-6)
+      //   .remove();
 
       // Update outliers.
       // var outlier = g.selectAll("circle.outlier")
