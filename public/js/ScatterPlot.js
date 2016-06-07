@@ -169,8 +169,6 @@ function ScatterPlot(){
 		legend_g.attr('transform', function(){
 			return 'scale(' + [legend_scale_x, legend_scale_y] + ') translate(' + [legend_margin.left, legend_margin.top] + ')';
 		});
-		this.update(true);
-
 	};
 
 	this.update = function(onResize){
