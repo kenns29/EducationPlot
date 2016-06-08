@@ -1,4 +1,5 @@
 (function() {
+  var sector = null;
 
 // Inspired by http://informationandvisualization.de/blog/box-plot
 d3.box = function() {
@@ -9,8 +10,7 @@ d3.box = function() {
       value = Number,
       whiskers = boxWhiskers,
       quartiles = boxQuartiles,
-      tickFormat = null,
-      oldSelect = [];
+      tickFormat = null;
 
   // For each small multiple…
   function box(g) {
@@ -152,13 +152,28 @@ d3.box = function() {
           .style("opacity", 1e-6)
           .remove();
 
-      g.selectAll("circle.selected").remove();
+      function equals(a, b) {
+          return a.label === b.label && a.pell === b.pell && a.grad === b.grad && a.sect === b.sect;
+      }
 
-      var selected = g.selectAll("circle.selected")
-          .data(state.SelectedInsts); //Filter by institution!
+      var sector = parseInt(d3.select(this).attr("class"));
 
+      g.selectAll("circle.selected")
+        .filter(function(d) {
+          if(d.sect !== sector)
+            return false;
+          return true;
+        })
+          .attr("class", "deselected")
+          .transition()
+          .duration(duration)
+          .style("opacity", 1e-6)
+          .remove();
 
-      selected.enter().insert("circle", "text")
+      g.selectAll("circle.selected")
+        .data(state.SelectedInsts)
+          .enter().insert("circle", "text")
+        .filter(function(d) { return d.sect === sector; })
           .attr("class", "selected")
           .attr("r", 2)
           .attr("cx", width / 2)
@@ -168,7 +183,17 @@ d3.box = function() {
           .duration(duration)
           .style("opacity", 1);
 
-      oldSelect = state.SelectedInsts;
+      g.selectAll("circle.selected")
+        .filter(function(d) { return d.sect === sector; })
+        .append("svg:tooltip")
+        .text(function(d) { return d.label })
+    
+      var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+          return "<span style='color:white'>" + d.label + "</span>";
+        });
 
       // selected.filter(function(d) {
       //   var remove = true;

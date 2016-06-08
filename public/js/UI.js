@@ -54,6 +54,7 @@ $('#box-pell').click(function(){
 		$(this).addClass('active');
 		$('#box-grad').removeClass('active');
 		opt.box_plot_pell = true;
+		scatterPlot.InstClick();
 		boxPlot.update();
 	}
 });
@@ -63,6 +64,7 @@ $('#box-grad').click(function(){
 		$(this).addClass('active');
 		$('#box-pell').removeClass('active');
 		opt.box_plot_pell = false;
+		scatterPlot.InstClick();
 		boxPlot.update();
 	}
 });

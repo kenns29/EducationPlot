@@ -15,6 +15,7 @@ function Slider(){
 					scatterPlot.update();
 				else
 					scatterPlot.updateTrajectory();
+				scatterPlot.InstClick();
 				treemap.update();
 				boxPlot.update();
 			}

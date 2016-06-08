@@ -52,6 +52,9 @@ function BoxPlot() {
 			      .attr("height", height + margin.bottom + margin.top)
 			    .append("g")
 			      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			      .attr("class", function(i) {
+			      	return i.sector === "public" ? 1 : i.sector === "private-not-for-profit" ? 2 : 3;
+			      })
 			      .call(chart);
 		} else {
 			var stripped_data = [];
