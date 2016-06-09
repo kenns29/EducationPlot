@@ -164,7 +164,7 @@
 #container #container_up #box-plot{
 	width: 100%;
 	height: calc(100% - 35px);
-	margin: auto;
+	margin-right: 10px;
 	float: left;
 }
 
