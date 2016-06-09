@@ -157,84 +157,60 @@ d3.box = function() {
       }
 
       var sector = parseInt(d3.select(this).attr("class"));
+      var sectorInsts = []
+      for(var key in state.SelectedInsts)
+        if(state.SelectedInsts[key].sect === sector)
+          sectorInsts.push(state.SelectedInsts[key]);
 
-      g.selectAll("circle.selected")
-        .filter(function(d) {
-          if(d.sect !== sector)
-            return false;
-          return true;
-        })
+
+      var tip = d3.tip()
+          .attr('class', 'd3-tip')
+          .offset([0, 10])
+          .html(function(d) {
+              return "<span style='color:white'>" + d.label + "</span>";
+          });
+
+      d3.select(g.node().parentNode).call(tip);
+
+      var circle_selection = g.selectAll("circle.selected")
+          .data(sectorInsts, function(d){
+              return d.id;
+        });
+
+      var circle_exit = circle_selection.exit();
+
+      circle_exit
           .attr("class", "deselected")
           .transition()
           .duration(duration)
           .style("opacity", 1e-6)
           .remove();
 
-      g.selectAll("circle.selected")
-        .data(state.SelectedInsts)
-          .enter().insert("circle", "text")
-        .filter(function(d) { return d.sect === sector; })
+      var circle_enter = circle_selection
+          .enter()
+          .append("circle")
           .attr("class", "selected")
-          .attr("r", 2)
+          .attr("r", 4)
           .attr("cx", width / 2)
           .attr("cy", function(i) { return x0(i[opt.box_plot_pell ? "pell" : "grad"]);})
-          .style("opacity", 1e-6)
+          .style("opacity", 1e-6);
+
+      circle_enter.on('mouseover', function(d, i){
+          tip.show(d, i);
+      });
+      circle_enter.on('mouseout', tip.hide);
+
+      circle_enter
         .transition()
           .duration(duration)
           .style("opacity", 1);
 
-      g.selectAll("circle.selected")
-        .filter(function(d) { return d.sect === sector; })
-        .append("svg:tooltip")
-        .text(function(d) { return d.label })
-    
-      var tip = d3.tip()
-        .attr('class', 'd3-tip')
-        .offset([-10, 0])
-        .html(function(d) {
-          return "<span style='color:white'>" + d.label + "</span>";
-        });
-
-      // selected.filter(function(d) {
-      //   var remove = true;
-      //   for(var key in state.SelectedInsts) {
-      //     if(state.SelectedInsts[key] === d) {
-      //       remove = false;
-      //       break;
-      //     }
-      //   }
-      //   if(remove)
-      //     return true;
-      // }).transition()
-      //   .duration(duration)
-      //   .style("opacity", 1e-6)
-      //   .remove();
-
-      // Update outliers.
-      // var outlier = g.selectAll("circle.outlier")
-      //     .data(outlierIndices, Number);
-
-      // outlier.enter().insert("circle", "text")
-      //     .attr("class", "outlier")
-      //     .attr("r", 5)
-      //     .attr("cx", width / 2)
-      //     .attr("cy", function(i) { return x0(d[i]); })
-      //     .style("opacity", 1e-6)
-      //   .transition()
-      //     .duration(duration)
-      //     .attr("cy", function(i) { return x1(d[i]); })
-      //     .style("opacity", 1);
-
-      // outlier.transition()
-      //     .duration(duration)
-      //     .attr("cy", function(i) { return x1(d[i]); })
-      //     .style("opacity", 1);
-
-      // outlier.exit().transition()
-      //     .duration(duration)
-      //     .attr("cy", function(i) { return x1(d[i]); })
-      //     .style("opacity", 1e-6)
-      //     .remove();
+      var circle_update = g.selectAll("circle.selected")
+        .transition()
+          .duration(duration)
+          .attr("cx", width / 2)
+          .attr("cy", function(i) { return x0(i[opt.box_plot_pell ? "pell" : "grad"]);})
+          .style("opacity", 1);
 
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);

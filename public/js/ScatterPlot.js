@@ -562,6 +562,7 @@ function ScatterPlot(){
 			if(IDs.has(0) || IDs.has(inst.UnitID)) {
 				if(!IDs.has(0)) {
 					state.SelectedInsts.push({
+						id : inst.UnitID,
 						label : inst.InstName,
 						pell : inst.Pell[state.year],
 						grad : inst.GradRate[state.year],

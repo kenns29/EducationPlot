@@ -96,7 +96,7 @@
 }
 #container #container_up #control #trajectory-control #trajectory-button-div{
 	left : 50%;
-	float:right;
+	text-align: right;
 }
 #container #container_up #view{
 	width: 60%;
@@ -146,6 +146,7 @@
 }
 
 #container #container_up #legend #multiple-school-tags{
+	text-align: right;
 	width : 100%;
 	height : 40%;
 }
@@ -246,7 +247,7 @@ input[type="radio"].styled:checked label:after,
 
 .tokenfield .token .token-label
 {
-	max-width: 250px !important;
+	max-width: 200px !important;
 }
 
 body {
