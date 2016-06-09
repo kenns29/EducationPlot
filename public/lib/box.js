@@ -233,7 +233,7 @@ d3.box = function() {
 
       boxTick.transition()
           .duration(duration)
-          .text(format)
+          .text(function(d) { return parseInt(d) + "%"; })
           .attr("y", x1);
 
       // Update whisker ticks. These are handled separately from the box
@@ -257,7 +257,7 @@ d3.box = function() {
 
       whiskerTick.transition()
           .duration(duration)
-          .text(format)
+          .text(function(d) { return parseInt(d) + "%"; })
           .attr("y", x1)
           .style("opacity", 1);
 

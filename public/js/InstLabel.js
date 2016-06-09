@@ -107,7 +107,7 @@ function InstLabel(){
 		var scaleX = currentWidth / init_width;
 		var scaleY = scaleX;
 
-		console.log('scaleX', scaleX, 'scaleY', scaleY);
+		// console.log('scaleX', scaleX, 'scaleY', scaleY);
 		g.attr('transform', 'scale(' + [scaleX, scaleY] + ') translate(' + [margin.left, margin.top] + ')');
 		return this;
 	};

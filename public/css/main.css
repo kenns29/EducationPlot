@@ -135,39 +135,33 @@
 #container #container_up #legend{
 	min-width: 200px;
 	width: 20%;
-	height: 60%;
+	height: 100%;
 	margin: auto;
 	float: left;
 }
 
 #container #container_up #legend #dot-legend-container{
 	width : 100%;
-	height : 60%;
+	height : 30%;
 }
 
-#container #container_up #legend #multiple-school-tags{
-	text-align: right;
+#container #container_up #legend #box-plot-container{
 	width : 100%;
-	height : 40%;
+	height : 70%;
+	text-align: center;
 }
 
-#container #container_up #legend #box_plot-container{
-	width : 100%;
-	height : 400px;
-	margin : auto;
-}
-
-#container #container_up #legend #box_plot-container #box-pell{
+#container #container_up #legend #box-plot-container #box-pell{
 	display:inline-block;
 	height : 35px;
 }
 
-#container #container_up #legend #box_plot-container #box-grad{
+#container #container_up #legend #box-plot-container #box-grad{
 	display: inline-block;
 	height : 35px;
 }
 
-#container #container_up #box_plot{
+#container #container_up #box-plot{
 	width: 100%;
 	height: calc(100% - 35px);
 	margin: auto;
@@ -245,21 +239,20 @@ input[type="radio"].styled:checked label:after,
 	display: none;
 }
 
-.tokenfield .token .token-label
-{
+.tokenfield .token .token-label {
 	max-width: 200px !important;
+}
+
+.tokenfield.form-control {
+	max-width: 250px !important;
 }
 
 body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#box-pell {
-	margin-left: 50px;
-}
-
 .box {
-  	font: 10px sans-serif;
+  	font: 1em sans-serif;
 }
 
 .box-public line,
@@ -289,3 +282,7 @@ body {
 .box .center {
   	stroke-dasharray: 3,3;
 }
+
+/*.whisker {
+	font-size: 1.5em;
+}*/

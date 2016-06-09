@@ -169,6 +169,10 @@ function ScatterPlot(){
 		legend_g.attr('transform', function(){
 			return 'scale(' + [legend_scale_x, legend_scale_y] + ') translate(' + [legend_margin.left, legend_margin.top] + ')';
 		});
+
+		boxPlot.resize();
+
+		// $(".tokenfield, .token, .token-label").css("max-width", $("#multiple-school-tags").width());
 	};
 
 	this.update = function(onResize){
