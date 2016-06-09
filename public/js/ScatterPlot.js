@@ -282,7 +282,7 @@ function ScatterPlot(){
 
 			//mean	for pell		
 			var meanstd_svg = svg.selectAll(".meanstd_pell").data(Pell_meanStd).enter()
-			.append("svg").attr("class","meanstd_pell");
+			.append("g").attr("class","meanstd_pell");
 			meanstd_svg
 			.append("line")
 			.attr("stroke-width", 3)
@@ -311,7 +311,7 @@ function ScatterPlot(){
 
 			//mean for grade rate
 			var meanstd2_svg = svg.selectAll(".meanstd_gradrate").data(GradeRate_meanStd).enter()
-			.append("svg").attr("class","meanstd_gradrate");
+			.append("g").attr("class","meanstd_gradrate");
 			meanstd2_svg.append("line")
 			.attr("stroke-width", 3)
 			.attr("stroke",function(d){return color_deep[d.InstSector - 1];})
