@@ -10,7 +10,7 @@ function BoxPlot() {
 	this.init = function() {
 		W = $(container).width();
 		H = $(container).height();
-		margin = {top: 10, right: 20, bottom: 20, left: 40};
+		margin = {top: 10, right: 30, bottom: 20, left: 40};
 		// width = W - margin.left - margin.right;
 		// height = H - margin.top - margin.bottom;
 
