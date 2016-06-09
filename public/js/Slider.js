@@ -8,19 +8,20 @@ function Slider(){
 			range: false,
 			min: yearRange[0],
 			max: yearRange[1],
-			step: 1,
+			step: 0.1,
 			slide: function(event, ui){
-				state.year = ui.value;
-				console.log('mode', scatterPlot.mode());
-				if(scatterPlot.mode() === ScatterPlot.SCATTER){
-					scatterPlot.update();
+				if(state.year !== Math.floor(ui.value)){
+					state.year = Math.floor(ui.value);
+					if(scatterPlot.mode() === ScatterPlot.SCATTER){
+						scatterPlot.update();
+					}
+					else{
+						scatterPlot.updateTrajectory();
+					}
+					scatterPlot.InstClick();
+					treemap.update();
+					boxPlot.update();
 				}
-				else{
-					scatterPlot.updateTrajectory();
-				}
-				scatterPlot.InstClick();
-				treemap.update();
-				boxPlot.update();
 			}
 		});
 

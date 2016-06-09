@@ -175,7 +175,7 @@ function ScatterPlot(){
 		// $(".tokenfield, .token, .token-label").css("max-width", $("#multiple-school-tags").width());
 	};
 
-	this.update = function(onResize){
+	this.update = function(){
 		mode = ScatterPlot.SCATTER;
 		// this.removeTrajectory();
 		d3.select(title_container).select("H3").text("Grade Rate, Pell, Year = " + state.year);
@@ -238,7 +238,7 @@ function ScatterPlot(){
 		dotUpdate
 		.transition()
 		.duration(function(){
-			return onResize ? 0 : 500;
+			return 1000;
 		})
 		.attr("r", function(d){
 			var value =  Math.max(0, d["NumStudents"][state.year]);
