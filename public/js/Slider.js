@@ -11,10 +11,13 @@ function Slider(){
 			step: 1,
 			slide: function(event, ui){
 				state.year = ui.value;
-				if(scatterPlot.mode() === ScatterPlot.SCATTER)
+				console.log('mode', scatterPlot.mode());
+				if(scatterPlot.mode() === ScatterPlot.SCATTER){
 					scatterPlot.update();
-				else
+				}
+				else{
 					scatterPlot.updateTrajectory();
+				}
 				scatterPlot.InstClick();
 				treemap.update();
 				boxPlot.update();

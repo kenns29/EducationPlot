@@ -580,10 +580,10 @@ function ScatterPlot(){
 		});
 		tokenfield.tokenfield("setTokens", tokens);
 		$("#institution").val(instLabel);
-		self.update();
+		if(mode === ScatterPlot.SCATTER)
+			self.update();
 		// TODO: Use solution that isn't so taxing!
 		treemap.update();
-		boxPlot.update();
 	};
 
 	this.showLegend = function(){
