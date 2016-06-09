@@ -75,12 +75,17 @@ $('ul#view-nav-bar li').each(function(){
 	$(this).on('click', function(){
 		var id = $(this).attr('id');
 		if(id === 'scatter-plot-tab-btn'){
-			if(scatterPlot)
+			if(scatterPlot){
 				scatterPlot.showLegend();
+				scatterPlot.update();
+			}
+
 		}
 		else if(id === 'treemap-tab-btn'){
-			if(scatterPlot)
+			if(scatterPlot){
 				scatterPlot.hideLegend();
+				treemap.update();
+			}
 		}
 	});
 });

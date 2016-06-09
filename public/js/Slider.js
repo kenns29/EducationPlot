@@ -12,14 +12,19 @@ function Slider(){
 			slide: function(event, ui){
 				if(state.year !== Math.floor(ui.value)){
 					state.year = Math.floor(ui.value);
-					if(scatterPlot.mode() === ScatterPlot.SCATTER){
-						scatterPlot.update();
+					if($("#scatter-plot-tab-btn").hasClass('active')){
+						if(scatterPlot.mode() === ScatterPlot.SCATTER){
+							scatterPlot.update();
+						}
+						else{
+							scatterPlot.updateTrajectory();
+						}
+						
 					}
 					else{
-						scatterPlot.updateTrajectory();
+						treemap.update();
 					}
 					scatterPlot.InstClick();
-					treemap.update();
 					boxPlot.update();
 				}
 			}

@@ -583,7 +583,8 @@ function ScatterPlot(){
 		if(mode === ScatterPlot.SCATTER)
 			self.update();
 		// TODO: Use solution that isn't so taxing!
-		treemap.update();
+		if($("#treemap-tab-btn").hasClass('active'))
+			treemap.update();
 	};
 
 	this.showLegend = function(){
