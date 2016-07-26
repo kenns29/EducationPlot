@@ -116,4 +116,10 @@ router.get('/loadconfs', function(req, res){
 	});
 });
 
+router.get('/loadusercohorts', function(req, res){
+	fs.readFile('userCohorts.json', 'utf8', function(err, contents){
+		res.json(JSON.parse(contents));
+	});
+});
+
 module.exports = router;

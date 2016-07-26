@@ -204,7 +204,8 @@ function ScatterPlot(){
 			var inst_sector_filter = state.InstSelections.has(inst_types[d.InstSector - 1]);
 			var missing_data_filter = opt.filter_missing_data ?  (d["GradRate"][state.year] >= 0 && d["Pell"][state.year] >= 0) : true;
 			var ncaa_conf_filter = state.ConfSelections.size() == 0 || state.ConfSelections.has(d.InstConf);
-			return inst_sector_filter && missing_data_filter && ncaa_conf_filter;
+			var user_cohort_filter = state.CohortSelections.size() == 0 || state.CohortSelections.has(d.UnitID);
+			return inst_sector_filter && missing_data_filter && ncaa_conf_filter && user_cohort_filter;
 		}), function(d, i){
 			return d.UnitID;
 		});

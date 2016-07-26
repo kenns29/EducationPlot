@@ -9,6 +9,7 @@ var state = {
 	year: 2008,
 	InstSelections: d3.set(inst_types),
 	ConfSelections: d3.set([]),
+	CohortSelections: d3.set([]),
 	SelectedInsts : []
 };
 

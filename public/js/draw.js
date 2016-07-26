@@ -1,4 +1,4 @@
-function draw(data, confs){
+function draw(data, confs, userCohorts){
 	preprocess(data);
 	scatterPlot = new ScatterPlot().data(data).init().update();
 	treemap = new Treemap().data(data).init().update();
@@ -6,6 +6,7 @@ function draw(data, confs){
 	init_search(data);
 	instLabel = new InstLabel().init();;
 	inst_confs(confs);
+	inst_userCohorts(userCohorts);
 	// slider(data);
 	slider = new Slider().data(data).init();
 }
@@ -86,6 +87,34 @@ function inst_confs(confs){
 					selected_confs.push(Number(checkboxes[i].getAttribute("value")));
 			}
 			state.ConfSelections = d3.set(selected_confs);
+			if(scatterPlot)
+				scatterPlot.update();
+			if(treemap)
+				treemap.update();
+		});
+		dropdown.append(element).end();
+	}
+}
+
+/*
+   User Defined dropdown
+ */
+function inst_userCohorts(cohorts){
+	var dropdown = $("#user-defined-dropdown");
+	for(var key in cohorts) {
+		var element = $('<label style="display:block;width:200px;"><input type="checkbox"/>' + key + '</label>');
+		element.attr("value", key);
+		element.click(function() {
+			var checkboxes = $("#user-defined-dropdown")[0].childNodes;
+			var selected_cohorts = [];
+			for(var i = 0; i < checkboxes.length; i++) {
+				if(checkboxes[i].childNodes[0].checked) {
+					for(var j in cohorts[checkboxes[i].getAttribute("value")]) {
+						selected_cohorts.push(Number(cohorts[checkboxes[i].getAttribute("value")][j]));
+					}
+				}
+			}
+			state.CohortSelections = d3.set(selected_cohorts);
 			if(scatterPlot)
 				scatterPlot.update();
 			if(treemap)

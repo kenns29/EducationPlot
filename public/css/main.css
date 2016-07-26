@@ -1,3 +1,10 @@
+#addCustomCohort {
+	display: block;
+	margin: 5px auto;
+}
+.remove-cohort {
+	margin-left: 5px;
+}
 .axis path,
 .axis line {
   fill: none;
