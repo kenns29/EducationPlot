@@ -122,4 +122,16 @@ router.get('/loadusercohorts', function(req, res){
 	});
 });
 
+router.post('/saveusercohorts', function(req, res){
+	fs.readFile('userCohorts.json', 'utf8', function(err, contents){
+		var cohorts = JSON.parse(contents)
+		for(var key in req.body) {
+			cohorts[key] = req.body[key]
+		}
+		fs.writeFile('userCohorts.json', JSON.stringify(cohorts),  function(err) {
+			
+		});
+	});
+	
+});
 module.exports = router;

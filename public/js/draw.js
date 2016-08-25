@@ -6,7 +6,7 @@ function draw(data, confs, userCohorts){
 	init_search(data);
 	instLabel = new InstLabel().init();;
 	inst_confs(confs);
-	inst_userCohorts(userCohorts);
+	inst_userCohorts(data, userCohorts);
 	// slider(data);
 	slider = new Slider().data(data).init();
 }
@@ -99,13 +99,12 @@ function inst_confs(confs){
 /*
    User Defined dropdown
  */
-function inst_userCohorts(cohorts){
-	var dropdown = $("#user-defined-dropdown");
+function inst_userCohorts(data, cohorts){
 	for(var key in cohorts) {
 		var element = $('<label style="display:block;width:200px;"><input type="checkbox"/>' + key + '</label>');
 		element.attr("value", key);
 		element.click(function() {
-			var checkboxes = $("#user-defined-dropdown")[0].childNodes;
+			var checkboxes = $("#user-cohort-checkboxes")[0].childNodes;
 			var selected_cohorts = [];
 			for(var i = 0; i < checkboxes.length; i++) {
 				if(checkboxes[i].childNodes[0].checked) {
@@ -120,8 +119,29 @@ function inst_userCohorts(cohorts){
 			if(treemap)
 				treemap.update();
 		});
-		dropdown.append(element).end();
+		$("#user-cohort-checkboxes").append(element).end();
 	}
+
+	for(var key in data) {
+		$("#availableSchools").append('<div value=' + data[key].UnitID + '>' + data[key].InstName + '</div>')
+	}
+
+	$("#availableSchools div").click(function() {
+		if(!$(this).hasClass('selected')) {
+			$(this).addClass('selected');
+			var chosen = $(this).clone()
+			$("#chosenSchools").append(chosen);
+			$(chosen).click(function(){
+				$("#availableSchools div").each(function() {
+					if($(this).attr('value') == $(chosen).attr('value')) {
+						$(this).removeClass('selected')
+					}
+				});
+				$(this).remove()
+			})
+		}
+	})
+	
 }
 
 /*

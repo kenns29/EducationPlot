@@ -90,6 +90,29 @@ $('ul#view-nav-bar li').each(function(){
 	});
 });
 
+$('#saveCustomCohort').click(function(e) {
+	if($('#newCohortName').val() != '') {
+		$('#newCohortName').closest('div').removeClass('has-error');
+		$('#modal-error-msg').html('');
+		$('#modal-error-msg').hide();
+		var name = $('#newCohortName').val()
+		var data = {}
+		data[name] = []
+		$("#chosenSchools div").each(function() {
+			data[name].push(parseInt($(this).attr('value')));
+		});
+		$.post('/saveusercohorts', data, function(req, res){
+			console.log('done')
+		});
+	}
+	else {
+		$('#newCohortName').closest('div').addClass('has-error');
+		$('#modal-error-msg').html('Please choose a name');
+		$('#modal-error-msg').show();
+		e.stopPropagation();
+	}
+});
+
 $(window).resize(function(){
 	//resizes all svg and their contents
 	if(scatterPlot) scatterPlot.resize();

@@ -1,3 +1,36 @@
+.customCohortModal {
+	width: 875px;
+}
+
+#modal-error-msg {
+	display: none;
+	color: #AC4B49;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#availableSchools .selected {
+	background-color: #DDECF8;
+	color: #3A7098;
+	border: 1px solid #79B7E7;
+	font-weight: bold;
+}
+.schoolSelection h4 {
+	text-align: center;
+	padding: 10px;
+}
+
+.schoolSelectionBox {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	height: 60%;
+	overflow-y: auto;
+}
+
+.schoolSelectionBox div{
+	padding: 2px 10px;
+}
+
 #addCustomCohort {
 	display: block;
 	margin: 5px auto;
