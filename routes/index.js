@@ -129,7 +129,8 @@ router.post('/saveusercohorts', function(req, res){
 			cohorts[key] = req.body[key]
 		}
 		fs.writeFile('userCohorts.json', JSON.stringify(cohorts),  function(err) {
-			
+			console.log('done')
+			res.json('{}')
 		});
 	});
 	

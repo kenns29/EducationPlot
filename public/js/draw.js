@@ -6,7 +6,8 @@ function draw(data, confs, userCohorts){
 	init_search(data);
 	instLabel = new InstLabel().init();;
 	inst_confs(confs);
-	inst_userCohorts(data, userCohorts);
+	inst_userCohorts_modal(data)
+	inst_userCohorts(userCohorts);
 	// slider(data);
 	slider = new Slider().data(data).init();
 }
@@ -96,32 +97,7 @@ function inst_confs(confs){
 	}
 }
 
-/*
-   User Defined dropdown
- */
-function inst_userCohorts(data, cohorts){
-	for(var key in cohorts) {
-		var element = $('<label style="display:block;width:200px;"><input type="checkbox"/>' + key + '</label>');
-		element.attr("value", key);
-		element.click(function() {
-			var checkboxes = $("#user-cohort-checkboxes")[0].childNodes;
-			var selected_cohorts = [];
-			for(var i = 0; i < checkboxes.length; i++) {
-				if(checkboxes[i].childNodes[0].checked) {
-					for(var j in cohorts[checkboxes[i].getAttribute("value")]) {
-						selected_cohorts.push(Number(cohorts[checkboxes[i].getAttribute("value")][j]));
-					}
-				}
-			}
-			state.CohortSelections = d3.set(selected_cohorts);
-			if(scatterPlot)
-				scatterPlot.update();
-			if(treemap)
-				treemap.update();
-		});
-		$("#user-cohort-checkboxes").append(element).end();
-	}
-
+function inst_userCohorts_modal(data) {
 	for(var key in data) {
 		$("#availableSchools").append('<div value=' + data[key].UnitID + '>' + data[key].InstName + '</div>')
 	}
@@ -141,7 +117,32 @@ function inst_userCohorts(data, cohorts){
 			})
 		}
 	})
-	
+}
+/*
+   User Defined dropdown
+ */
+function inst_userCohorts(cohorts) {
+	for(var key in cohorts) {
+		var element = $('<div class="checkbox checkbox-primary"><input type="checkbox"><label>' + key + '</label></div>');
+		element.attr("value", key);
+		element.click(function() {
+			var checkboxes = $("#user-cohort-checkboxes")[0].childNodes;
+			var selected_cohorts = [];
+			for(var i = 0; i < checkboxes.length; i++) {
+				if(checkboxes[i].childNodes[0].checked) {
+					for(var j in cohorts[checkboxes[i].getAttribute("value")]) {
+						selected_cohorts.push(Number(cohorts[checkboxes[i].getAttribute("value")][j]));
+					}
+				}
+			}
+			state.CohortSelections = d3.set(selected_cohorts);
+			if(scatterPlot)
+				scatterPlot.update();
+			if(treemap)
+				treemap.update();
+		});
+		$("#user-cohort-checkboxes").append(element).end();
+	}
 }
 
 /*

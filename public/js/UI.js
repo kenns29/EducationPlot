@@ -102,8 +102,9 @@ $('#saveCustomCohort').click(function(e) {
 			data[name].push(parseInt($(this).attr('value')));
 		});
 		$.post('/saveusercohorts', data, function(req, res){
-			console.log('done')
+			inst_userCohorts(data)
 		});
+
 	}
 	else {
 		$('#newCohortName').closest('div').addClass('has-error');
