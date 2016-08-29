@@ -122,14 +122,15 @@ function inst_userCohorts_modal(data) {
    User Defined dropdown
  */
 function inst_userCohorts(cohorts) {
+	$("#user-cohort-checkboxes").empty()
 	for(var key in cohorts) {
-		var element = $('<div class="checkbox checkbox-primary"><input type="checkbox"><label>' + key + '</label></div>');
+		var element = $('<div><span class="glyphicon glyphicon-trash remove-icon" aria-hidden="true"></span><div class="checkbox checkbox-primary school-checkbox"><input type="checkbox"><label>' + key + '</label></div></div>');
 		element.attr("value", key);
 		element.click(function() {
 			var checkboxes = $("#user-cohort-checkboxes")[0].childNodes;
 			var selected_cohorts = [];
 			for(var i = 0; i < checkboxes.length; i++) {
-				if(checkboxes[i].childNodes[0].checked) {
+				if(checkboxes[i].childNodes[1].childNodes[0].checked) {
 					for(var j in cohorts[checkboxes[i].getAttribute("value")]) {
 						selected_cohorts.push(Number(cohorts[checkboxes[i].getAttribute("value")][j]));
 					}
@@ -143,6 +144,24 @@ function inst_userCohorts(cohorts) {
 		});
 		$("#user-cohort-checkboxes").append(element).end();
 	}
+	$("#user-cohort-checkboxes").find('.remove-icon').click(function(e) {
+		var name = $(this).closest('div').find('label').html()
+		$.post('/removeusercohorts', name, function(req, res){
+				
+		});
+		$(this).closest('div').remove();
+
+		// var data = {}
+		// data[name] = []
+		// $("#chosenSchools div").each(function() {
+		// 	data[name].push(parseInt($(this).attr('value')));
+		// });
+		// $.post('/saveusercohorts', data, function(req, res){
+		// 	inst_userCohorts(data)
+		// });
+
+		e.stopPropagation();
+	});
 }
 
 /*

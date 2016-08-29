@@ -1,3 +1,25 @@
+.school-checkbox {
+	display: inline-block;
+}
+
+#user-defined-dropdown-controls {
+	text-align: center;
+}
+
+#user-defined-dropdown button {
+	display: inline-block;
+}
+
+#user-defined-dropdown button:active, #user-defined-dropdown button:focus {
+	outline: none;
+}
+
+.remove-icon {
+	margin-right: 3px;
+	color: #C9302C;
+	display: none;
+}
+
 #data-control div {
 	margin: 2px 0px;
 }

@@ -130,6 +130,20 @@ router.post('/saveusercohorts', function(req, res){
 		}
 		fs.writeFile('userCohorts.json', JSON.stringify(cohorts),  function(err) {
 			console.log('done')
+			res.json(JSON.stringify(cohorts))
+		});
+	});
+	
+});
+
+router.post('/removeusercohorts', function(req, res){
+	fs.readFile('userCohorts.json', 'utf8', function(err, contents){
+		var cohorts = JSON.parse(contents)
+		for(var key in req.body) {
+			delete cohorts[key]
+		}
+		fs.writeFile('userCohorts.json', JSON.stringify(cohorts),  function(err) {
+			console.log('done')
 			res.json('{}')
 		});
 	});

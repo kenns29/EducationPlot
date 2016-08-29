@@ -90,6 +90,19 @@ $('ul#view-nav-bar li').each(function(){
 	});
 });
 
+$('#addCustomCohort').click(function() {
+	$("#availableSchools div").each(function() {
+		$(this).removeClass('selected');
+	});
+	$('#newCohortName').val('');
+	$("#chosenSchools").empty();
+});
+
+$('#removeCustomCohort').click(function(e) {
+	$('#user-cohort-checkboxes').find('.remove-icon').toggle(300);
+	e.stopPropagation();
+});
+
 $('#saveCustomCohort').click(function(e) {
 	if($('#newCohortName').val() != '') {
 		$('#newCohortName').closest('div').removeClass('has-error');
@@ -102,7 +115,7 @@ $('#saveCustomCohort').click(function(e) {
 			data[name].push(parseInt($(this).attr('value')));
 		});
 		$.post('/saveusercohorts', data, function(req, res){
-			inst_userCohorts(data)
+			inst_userCohorts(JSON.parse(req))
 		});
 
 	}
